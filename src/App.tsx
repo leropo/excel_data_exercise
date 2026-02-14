@@ -3,6 +3,8 @@ import * as XLSX from 'xlsx'
 import './App.css'
 import { validateExcelFile, parseExcelFile } from './utils'
 import TreeTable from './components/TreeTable'
+import FileUpload from './components/FileUpload'
+
 
 function App() {
   const [parsedData, setParsedData] = useState<any[][] | null>(null)
@@ -71,34 +73,7 @@ function App() {
       </header>
 
       <main className="app-main">
-
-        <div className="upload-section">
-            <label htmlFor="file-upload" className="upload-label">
-            <svg 
-                xmlns="http://www.w3.org/2000/svg" 
-                width="24" 
-                height="24" 
-                viewBox="0 0 24 24" 
-                fill="none" 
-                stroke="currentColor" 
-                strokeWidth="2" 
-                strokeLinecap="round" 
-                strokeLinejoin="round"
-            >
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                <polyline points="17 8 12 3 7 8"></polyline>
-                <line x1="12" y1="3" x2="12" y2="15"></line>
-            </svg>
-            Choose XLSX File
-            </label>
-            <input
-            id="file-upload"
-            type="file"
-            accept=".xlsx,.xls"
-            onChange={handleFileUpload}
-            className="file-input"
-            />
-        </div>
+        <FileUpload handleFileUpload={handleFileUpload} />
 
         {error && (
           <div className="error-message">
