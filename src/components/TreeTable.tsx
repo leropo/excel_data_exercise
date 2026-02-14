@@ -5,6 +5,8 @@ export default function TreeTable({ data }) {
       <table className="data-table">
         <thead>
             <th>
+            </th> 
+            <th>
               Code
             </th>  
             <th>
