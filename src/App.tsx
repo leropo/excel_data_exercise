@@ -2,13 +2,8 @@ import { useState } from 'react'
 import * as XLSX from 'xlsx'
 import './App.css'
 
-interface ParsedData {
-  sheetNames: string[]
-  sheets: { [sheetName: string]: any[][] }
-}
-
 function App() {
-  const [parsedData, setParsedData] = useState<ParsedData | null>(null)
+  const [parsedData, setParsedData] = useState<any[][] | null>(null)
   const [error, setError] = useState<string | null>(null)
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -38,27 +33,19 @@ function App() {
         // Parse the Excel file
         const workbook = XLSX.read(data, { type: 'binary' })
         
-        // Extract sheet names
-        const sheetNames = workbook.SheetNames
+        // Get the first sheet
+        const firstSheetName = workbook.SheetNames[0]
+        const worksheet = workbook.Sheets[firstSheetName]
         
-        // Extract data from each sheet
-        const sheets: { [sheetName: string]: any[][] } = {}
-        
-        sheetNames.forEach((sheetName) => {
-          const worksheet = workbook.Sheets[sheetName]
-          const jsonData = XLSX.utils.sheet_to_json(worksheet, { 
-            header: 1,
-            defval: ''
-          })
-          sheets[sheetName] = jsonData as any[][]
+        // Extract data from first sheet only
+        const jsonData = XLSX.utils.sheet_to_json(worksheet, { 
+          header: 1,
+          defval: ''
         })
 
-        setParsedData({
-          sheetNames,
-          sheets
-        })
+        setParsedData(jsonData as any[][])
 
-        console.log('Parsed Excel data:', { sheetNames, sheets })
+        console.log('Parsed Excel data:', jsonData)
       } catch (err) {
         console.error('Error parsing file:', err)
         setError('Failed to parse Excel file. Please ensure it is a valid file.')
@@ -118,24 +105,19 @@ function App() {
         {parsedData && (
           <div className="content-display">
             <h2>File Contents</h2>
-            {parsedData.sheetNames.map((sheetName, index) => (
-              <div key={index} className="sheet-container">
-                <h3 className="sheet-name">{sheetName}</h3>
-                <div className="table-wrapper">
-                  <table className="data-table">
-                    <tbody>
-                      {parsedData.sheets[sheetName].map((row, rowIndex) => (
-                        <tr key={rowIndex}>
-                          {row.map((cell, cellIndex) => (
-                            <td key={cellIndex}>{cell || ''}</td>
-                          ))}
-                        </tr>
+            <div className="table-wrapper">
+              <table className="data-table">
+                <tbody>
+                  {parsedData.map((row, rowIndex) => (
+                    <tr key={rowIndex}>
+                      {row.map((cell, cellIndex) => (
+                        <td key={cellIndex}>{cell || ''}</td>
                       ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         )}
       </main>
