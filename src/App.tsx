@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import * as XLSX from 'xlsx'
-import './App.css'
-import { validateExcelFile, parseExcelFile } from './utils'
+
 import TreeTable from './components/TreeTable'
 import FileUpload from './components/FileUpload'
-
+import { validateExcelFile, parseExcelFile } from './helpers/utils'
+import './styles/App.css'
 
 function App() {
   const [parsedData, setParsedData] = useState<any[][] | null>(null)
