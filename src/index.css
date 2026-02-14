@@ -31,3 +31,8 @@ body {
   width: 100%;
   min-height: 100vh;
 }
+
+.collapse-icon {
+  margin-right: 8px;
+  cursor: pointer;
+}
