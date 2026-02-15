@@ -21,13 +21,13 @@ export function Row({ node, depth = 0 }) {
           )}
         </td>
         <td>
-          {node.data[0]}
+          {node.data.outline_level}
         </td>
         <td>
-          {node.data[1]}
+          {node.data.code}
         </td>
         <td>
-          {node.data[2]}
+          {node.data.name}
         </td>
       </tr>
 

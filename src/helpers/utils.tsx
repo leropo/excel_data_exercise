@@ -1,42 +1,13 @@
 import { CVS_COLUMNS, LEAF_NODE_ENDING } from './constants'
 
-
-/*
-
-function buildHierarchy(list) {
-  const root = [];
-
-  // Map for quick lookup: "1.1.2" → node reference
-  const lookup = {};
-
-  for (const id of list) {
-    const parts = id.split(".");
-    const parentKey = parts.slice(0, -1).join(".");
-    const isRoot = parts.length === 1;
-
-    const node = { id, children: [] };
-    lookup[id] = node;
-
-    if (isRoot) {
-      // Top-level node
-      root.push(node);
-    } else {
-      // Attach to parent
-      const parent = lookup[parentKey];
-
-      // If parent doesn't exist yet (unordered input), create placeholder
-      if (!parent) {
-        lookup[parentKey] = { id: parentKey, children: [] };
-      }
-
-      lookup[parentKey].children.push(node);
-    }
-  }
-
-  return root;
+function parseValues(row) {
+  const obj = {};
+  row.forEach((field, index) => {
+    obj[CVS_COLUMNS[index].field] = row[index];
+  });
+   
+  return obj;
 }
-
-*/
 
 export function validateExcelFile(file: File): boolean {
   // TODO: Implement validation logic
@@ -57,7 +28,10 @@ export function parseExcelFile(data: unknown[][]): any[] {
 
     const parentKey = parts.slice(0, -1).join(".");
 
-    const node: {id:string; data:unknown[]; isLeaf:boolean; children?:Array<any>} = {id, data: row, isLeaf: isLeaf };
+    console.log(parseValues(row));
+
+    const node: {id:string; data:unknown[]; isLeaf:boolean; children?:Array<any>} 
+      = {id, data: parseValues(row), isLeaf: isLeaf };
     if (!isLeaf) {
       node.children = [];
     }

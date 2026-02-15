@@ -3,19 +3,19 @@ export function DetailedInfo({ node, depth }) {
         <>
             <tr className="row">
                 <td>Description</td>
-                <td colSpan={3}>{node.data[3]}</td>
+                <td colSpan={3}>{node.data.description}</td>
             </tr>
             <tr className="row">
                 <td>Quantity</td>
-                <td>{node.data[4]}</td>
-                <td>{node.data[5]}</td>
-                <td>{node.data[6]}</td>
+                <td>{node.data.quantity_type}</td>
+                <td>{node.data.quantity_unit}</td>
+                <td>{node.data.quantity_formula}</td>
             </tr>
 
-            {node.data[7].length > 0 &&            
+            {node.data.element_query.length > 0 &&            
              <tr className="row">
                 <td>Element Query</td>
-                <td colSpan={3}>{node.data[7]}</td>
+                <td colSpan={3}>{node.data.element_query}</td>
             </tr>}
 
 
