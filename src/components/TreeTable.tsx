@@ -7,13 +7,13 @@ export default function TreeTable({ data }) {
             <th>
             </th> 
             <th>
-              Code
+              Outline Level
             </th>  
             <th>
-             	Name
+              Code         	
             </th> 
             <th>
-             	Description
+              Name
             </th>
         </thead>
         <tbody>

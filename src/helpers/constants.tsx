@@ -1,4 +1,4 @@
-const cvsColumns = [
+const CVS_COLUMNS = [
     "Outline Level",
     "Code",
     "Name",
@@ -11,4 +11,4 @@ const cvsColumns = [
 
   const LEAF_NODE_ENDING = '.0';
   
-  export { cvsColumns, LEAF_NODE_ENDING };
+  export { CVS_COLUMNS , LEAF_NODE_ENDING };

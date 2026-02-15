@@ -1,4 +1,4 @@
-import { cvsColumns, LEAF_NODE_ENDING } from './constants'
+import { CVS_COLUMNS, LEAF_NODE_ENDING } from './constants'
 
 
 /*
