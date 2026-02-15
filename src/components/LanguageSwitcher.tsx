@@ -4,7 +4,7 @@ import { supportedLocales, type Locale } from '../i18n/translations';
 // Language display names (you can add these to translations if needed)
 const languageNames: Record<Locale, string> = {
   en: 'English',
-  es: 'Español',
+  sl: 'Slovensko',
 };
 
 export function LanguageSwitcher() {
