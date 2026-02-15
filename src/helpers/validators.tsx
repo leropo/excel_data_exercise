@@ -87,8 +87,12 @@ export function validateOutlineLevels(list: string[][], levelIndex: number): any
         }
 
         // If format is broken, skip hierarchy checks
-        if (i === 0 || errors.length > 0) {
+        if (errors.length > 0) {
             results.push({ index: i, value, errors });
+            continue;
+        }
+
+        if (i === 0) {
             continue;
         }
 
