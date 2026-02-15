@@ -13,5 +13,5 @@ export type CsvRow = {
     id: string;
     data: CsvRow;
     isLeaf: boolean;
-    children?: Array<TableRow>
+    children: Array<TableRow>
   }

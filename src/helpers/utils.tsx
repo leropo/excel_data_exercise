@@ -24,18 +24,11 @@ export function parseExcelFile(data: unknown[][]): any[] {
   for (const row of body) {
     const id = row[0] as string;
     const isLeaf = id.endsWith(LEAF_NODE_ENDING);
-
     const parts = id.split(".");
     const isRoot = parts.length === 1;
-
     const parentKey = parts.slice(0, -1).join(".");
 
-    console.log(parseValues(row));
-
-    const node: TableRow = {id, data: parseValues(row), isLeaf: isLeaf };
-    if (!isLeaf) {
-      node.children = [];
-    }
+    const node: TableRow = {id, data: parseValues(row), isLeaf: isLeaf, children: []};
     lookup[id] = node;
 
     if (isRoot) {
@@ -43,7 +36,7 @@ export function parseExcelFile(data: unknown[][]): any[] {
         continue;
     }
     const parent = lookup[parentKey];
-    // If parent does not exists skip, it is assumed data is correctly sorted
+    // If parent does not exists skip, it is currently assumed that data is correctly sorted
     if (!parent) {
       continue;
     }
