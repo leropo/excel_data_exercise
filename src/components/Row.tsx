@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { DetailedInfo } from "./DetailedInfo";
 
 export function Row({ node, depth = 0 }) {
   const [open, setOpen] = useState(false);
@@ -28,14 +29,17 @@ export function Row({ node, depth = 0 }) {
         <td>
           {node.data[2]}
         </td>
-
       </tr>
 
-      {open &&
-        hasChildren &&
+      {open && hasChildren &&
         node.children.map(child => (
           <Row key={child.id} node={child} depth={depth + 1} />
         ))}
+
+      {node.isLeaf &&
+          <DetailedInfo key={`detailed_info_${node.id}`} node={node} depth={depth}  />
+      }
+
     </>
   );
 }

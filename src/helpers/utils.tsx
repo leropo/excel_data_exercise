@@ -1,4 +1,4 @@
-import { cvsColumns } from './constants'
+import { cvsColumns, LEAF_NODE_ENDING } from './constants'
 
 
 /*
@@ -52,20 +52,26 @@ export function parseExcelFile(data: unknown[][]): any[] {
 
   for (const row of body) {
     const id = row[0] as string;
+    const isLeaf = id.endsWith(LEAF_NODE_ENDING);
+
     const parts = id.split(".");
-    const parentKey = parts.slice(0, -1).join(".");
     const isRoot = parts.length === 1;
 
-    const node = {id, data: row, children: [] };
+    const parentKey = parts.slice(0, -1).join(".");
+
+    const node: {id:string; data:unknown[]; isLeaf:boolean; children?:Array<any>} = {id, data: row, isLeaf: isLeaf };
+    if (!isLeaf) {
+      node.children = [];
+    }
     lookup[id] = node;
 
     if (isRoot) {
         root.push(node);
         continue;
     }
-
-    const parent = lookup[parentKey];
     // If parent doesn't exist yet (unordered input), create placeholder
+    // should not happen based on data
+    const parent = lookup[parentKey];
     if (!parent) {
       lookup[parentKey] = { id: parentKey, data: row, children: [] };
     }

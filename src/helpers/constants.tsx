@@ -8,5 +8,7 @@ const cvsColumns = [
     "Quantity Formula",
     "Element Query"
   ];
+
+  const LEAF_NODE_ENDING = '.0';
   
-  export { cvsColumns };
+  export { cvsColumns, LEAF_NODE_ENDING };
