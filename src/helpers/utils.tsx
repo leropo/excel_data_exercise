@@ -44,9 +44,7 @@ export function validateExcelFile(file: File): boolean {
 }
 
 export function parseExcelFile(data: unknown[][]): any[] {
-  // TODO: Implement parsing logic  
   const body = data.slice(1);
-
   const root: any[] = [];
   const lookup: Record<string, any> = {};
 
@@ -76,11 +74,6 @@ export function parseExcelFile(data: unknown[][]): any[] {
       lookup[parentKey] = { id: parentKey, data: row, children: [] };
     }
     lookup[parentKey].children.push(node);
-
-
   }
-  console.log(root);
-
-
   return root;
 }
