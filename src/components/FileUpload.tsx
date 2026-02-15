@@ -1,6 +1,8 @@
 import { XLSX_EXTENSION, XLS_EXTENSION } from '../helpers/constants'
+import {FileUploadProps} from '../types/htmlElements'
 
-export default function FileUpload({ handleFileUpload }) {
+
+export default function FileUpload({ handleFileUpload }: FileUploadProps) {
     return (
         <div className="upload-section">
             <label htmlFor="file-upload" className="upload-label">

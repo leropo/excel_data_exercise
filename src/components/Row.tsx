@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { DetailedInfo } from "./DetailedInfo";
-import { TableRow } from "../types/types";
+import { TableRow } from "../types/data";
 
 export function Row({ 
   node, 
@@ -60,7 +60,7 @@ export function Row({
         ))}
 
       {isExpanded && isLeaf &&
-          <DetailedInfo key={`detailed_info_${node.id}`} node={node} depth={depth}  />
+          <DetailedInfo key={`detailed_info_${node.id}`} node={node} />
       }
 
     </>

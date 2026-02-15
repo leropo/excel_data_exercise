@@ -6,9 +6,10 @@ import FileUpload from './components/FileUpload'
 import { validateExcelFile, parseExcelFile } from './helpers/utils'
 import { XLSX_EXTENSION, XLS_EXTENSION } from './helpers/constants'
 import './styles/App.css'
+import { TableRow } from "./types/data";
 
 function App() {
-  const [parsedData, setParsedData] = useState<any[][] | null>(null)
+  const [parsedData, setParsedData] = useState<TableRow[] | null>(null)
   const [error, setError] = useState<string | null>(null)
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,7 +37,7 @@ function App() {
         }
 
         // Parse the Excel file
-        const workbook = XLSX.read(data, { type: 'binary' })
+        const workbook = XLSX.read(data, { type: "binary" })
         
         // Get the first sheet
         const firstSheetName = workbook.SheetNames[0]
@@ -48,7 +49,7 @@ function App() {
           defval: '',
         })
 
-        const parsedData =  parseExcelFile(jsonData as unknown[][]);
+        const parsedData =  parseExcelFile(jsonData as string[][]);
         setParsedData(parsedData);
 
         console.log('Parsed Excel data:', jsonData)

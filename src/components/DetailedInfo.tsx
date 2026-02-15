@@ -1,6 +1,6 @@
-import { TableRow } from "../types/types";
+import { TableRow } from "../types/data";
 
-export function DetailedInfo({ node, depth }: { node: TableRow; depth: number }) {
+export function DetailedInfo({ node }: { node: TableRow }) {
     return (
         <>
             <tr className="row">

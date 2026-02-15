@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Row } from "./Row";
-import { TableRow } from "../types/types";
+import { TableRow } from "../types/data";
 
 export default function TreeTable({ data }: {data: TableRow[]}) {
     const [expandAll, setExpandAll] = useState<boolean | null>(null);

@@ -1,11 +1,11 @@
 import { CVS_COLUMNS, LEAF_NODE_ENDING } from './constants'
-import { CsvRow, TableRow } from "../types/types";
+import { CsvRow, TableRow } from "../types/data";
 
-function parseValues(row): CsvRow {
+function parseValues(row: string[]): CsvRow {
   const obj = {} as CsvRow;
-  
   row.forEach((field, index) => {
-    obj[CVS_COLUMNS[index].field] = row[index];
+    const key = CVS_COLUMNS[index].field as keyof CsvRow;
+    obj[key] = field;
   });
    
   return obj;
@@ -16,7 +16,7 @@ export function validateExcelFile(file: File): boolean {
   return true;
 }
 
-export function parseExcelFile(data: unknown[][]): any[] {
+export function parseExcelFile(data: string[][]): TableRow[] {
   const body = data.slice(1);
   const root: TableRow[] = [];
   const lookup: Record<string, TableRow> = {};
