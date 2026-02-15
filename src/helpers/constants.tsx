@@ -11,4 +11,7 @@ const CVS_COLUMNS = [
 
   const LEAF_NODE_ENDING = '.0';
   
-  export { CVS_COLUMNS , LEAF_NODE_ENDING };
+  const XLSX_EXTENSION = '.xlsx';
+  const XLS_EXTENSION = '.xls';
+  
+  export { CVS_COLUMNS, LEAF_NODE_ENDING, XLSX_EXTENSION, XLS_EXTENSION };

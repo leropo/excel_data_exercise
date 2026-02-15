@@ -4,6 +4,7 @@ import * as XLSX from 'xlsx'
 import TreeTable from './components/TreeTable'
 import FileUpload from './components/FileUpload'
 import { validateExcelFile, parseExcelFile } from './helpers/utils'
+import { XLSX_EXTENSION, XLS_EXTENSION } from './helpers/constants'
 import './styles/App.css'
 
 function App() {
@@ -19,8 +20,8 @@ function App() {
     setError(null)
 
     // Validate file type
-    if (!file.name.endsWith('.xlsx') && !file.name.endsWith('.xls')) {
-      setError('Please upload a valid Excel file (.xlsx or .xls)')
+    if (!file.name.endsWith(XLSX_EXTENSION) && !file.name.endsWith(XLS_EXTENSION)) {
+      setError(`Please upload a valid Excel file (${XLSX_EXTENSION} or ${XLS_EXTENSION})`)
       return
     }
 

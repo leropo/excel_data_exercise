@@ -1,3 +1,5 @@
+import { XLSX_EXTENSION, XLS_EXTENSION } from '../helpers/constants'
+
 export default function FileUpload({ handleFileUpload }) {
     return (
         <div className="upload-section">
@@ -22,7 +24,7 @@ export default function FileUpload({ handleFileUpload }) {
             <input
             id="file-upload"
             type="file"
-            accept=".xlsx,.xls"
+            accept={`${XLSX_EXTENSION},${XLS_EXTENSION}`}
             onChange={handleFileUpload}
             className="file-input"
             />
