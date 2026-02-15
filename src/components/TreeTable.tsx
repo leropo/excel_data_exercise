@@ -1,6 +1,7 @@
 import { Row } from "./Row";
+import { TableRow } from "../types/types";
 
-export default function TreeTable({ data }) {
+export default function TreeTable({ data }: {data: TableRow[]}) {
     return (
       <table className="data-table">
         <thead>

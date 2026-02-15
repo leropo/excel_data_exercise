@@ -1,7 +1,9 @@
 import { CVS_COLUMNS, LEAF_NODE_ENDING } from './constants'
+import { CsvRow, TableRow } from "../types/types";
 
-function parseValues(row) {
-  const obj = {};
+function parseValues(row): CsvRow {
+  const obj = {} as CsvRow;
+  
   row.forEach((field, index) => {
     obj[CVS_COLUMNS[index].field] = row[index];
   });
@@ -16,8 +18,8 @@ export function validateExcelFile(file: File): boolean {
 
 export function parseExcelFile(data: unknown[][]): any[] {
   const body = data.slice(1);
-  const root: any[] = [];
-  const lookup: Record<string, any> = {};
+  const root: TableRow[] = [];
+  const lookup: Record<string, TableRow> = {};
 
   for (const row of body) {
     const id = row[0] as string;
@@ -30,8 +32,7 @@ export function parseExcelFile(data: unknown[][]): any[] {
 
     console.log(parseValues(row));
 
-    const node: {id:string; data:unknown[]; isLeaf:boolean; children?:Array<any>} 
-      = {id, data: parseValues(row), isLeaf: isLeaf };
+    const node: TableRow = {id, data: parseValues(row), isLeaf: isLeaf };
     if (!isLeaf) {
       node.children = [];
     }
@@ -41,11 +42,10 @@ export function parseExcelFile(data: unknown[][]): any[] {
         root.push(node);
         continue;
     }
-    // If parent doesn't exist yet (unordered input), create placeholder
-    // should not happen based on data
     const parent = lookup[parentKey];
+    // If parent does not exists skip, it is assumed data is correctly sorted
     if (!parent) {
-      lookup[parentKey] = { id: parentKey, data: row, children: [] };
+      continue;
     }
     lookup[parentKey].children.push(node);
   }

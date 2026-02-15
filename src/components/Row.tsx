@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { DetailedInfo } from "./DetailedInfo";
+import { TableRow } from "../types/types";
 
-export function Row({ node, depth = 0 }) {
+export function Row({ node, depth = 0 }: { node: TableRow; depth?: number }) {
   const [open, setOpen] = useState(false);
   const hasChildren = node.children && node.children.length > 0;
 
@@ -20,6 +21,7 @@ export function Row({ node, depth = 0 }) {
             </span>
           )}
         </td>
+        
         <td>
           {node.data.outline_level}
         </td>
