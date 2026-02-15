@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { Row } from "./Row";
 import { TableRow } from "../types/data";
+import { useTranslation } from "../i18n/TranslationContext";
 
 export default function TreeTable({ data }: {data: TableRow[]}) {
+    const { t } = useTranslation();
     const [expandAll, setExpandAll] = useState<boolean | null>(null);
 
     const handleToggleAll = () => {
@@ -15,9 +17,9 @@ export default function TreeTable({ data }: {data: TableRow[]}) {
           <button 
             className="global-toggle-button"
             onClick={handleToggleAll}
-            aria-label={expandAll ? "Collapse All" : "Expand All"}
+            aria-label={expandAll ? t.table.collapseAll : t.table.expandAll}
           >
-            {expandAll ? "▼ Collapse All" : "▶ Expand All"}
+            {expandAll ? `▼ ${t.table.collapseAll}` : `▶ ${t.table.expandAll}`}
           </button>
         </div>
         <table className="data-table">
@@ -25,13 +27,13 @@ export default function TreeTable({ data }: {data: TableRow[]}) {
               <th>
               </th> 
               <th>
-                Outline Level
+                {t.table.headers.outlineLevel}
               </th>  
               <th>
-                Code         	
+                {t.table.headers.code}
               </th> 
               <th>
-                Name
+                {t.table.headers.name}
               </th>
           </thead>
           <tbody>

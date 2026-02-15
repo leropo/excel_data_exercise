@@ -1,8 +1,10 @@
 import { XLSX_EXTENSION, XLS_EXTENSION } from '../helpers/constants'
 import {FileUploadProps} from '../types/htmlElements'
+import { useTranslation } from '../i18n/TranslationContext'
 
 
 export default function FileUpload({ handleFileUpload }: FileUploadProps) {
+    const { t } = useTranslation();
     return (
         <div className="upload-section">
             <label htmlFor="file-upload" className="upload-label">
@@ -21,7 +23,7 @@ export default function FileUpload({ handleFileUpload }: FileUploadProps) {
                 <polyline points="17 8 12 3 7 8"></polyline>
                 <line x1="12" y1="3" x2="12" y2="15"></line>
             </svg>
-            Choose XLSX File
+            {t.upload.chooseFile}
             </label>
             <input
             id="file-upload"

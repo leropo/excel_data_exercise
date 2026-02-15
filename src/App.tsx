@@ -3,12 +3,15 @@ import * as XLSX from 'xlsx'
 
 import TreeTable from './components/TreeTable'
 import FileUpload from './components/FileUpload'
-import { validateExcelFile, parseExcelFile } from './helpers/utils'
+import { LanguageSwitcher } from './components/LanguageSwitcher'
+import { parseExcelFile } from './helpers/utils'
 import { XLSX_EXTENSION, XLS_EXTENSION } from './helpers/constants'
 import './styles/App.css'
 import { TableRow } from "./types/data";
+import { useTranslation } from './i18n/TranslationContext'
 
 function App() {
+  const { t } = useTranslation()
   const [parsedData, setParsedData] = useState<TableRow[] | null>(null)
   const [error, setError] = useState<string | null>(null)
 
@@ -22,7 +25,7 @@ function App() {
 
     // Validate file type
     if (!file.name.endsWith(XLSX_EXTENSION) && !file.name.endsWith(XLS_EXTENSION)) {
-      setError(`Please upload a valid Excel file (${XLSX_EXTENSION} or ${XLS_EXTENSION})`)
+      setError(t.app.errors.invalidFileType)
       return
     }
 
@@ -32,7 +35,7 @@ function App() {
       try {
         const data = e.target?.result
         if (!data) {
-          setError('Failed to read file')
+          setError(t.app.errors.failedToRead)
           return
         }
 
@@ -55,12 +58,12 @@ function App() {
         console.log('Parsed Excel data:', jsonData)
       } catch (err) {
         console.error('Error parsing file:', err)
-        setError('Failed to parse Excel file. Please ensure it is a valid file.')
+        setError(t.app.errors.failedToParse)
       }
     }
 
     reader.onerror = () => {
-      setError('Error reading file')
+      setError(t.app.errors.errorReading)
     }
 
     // Read file as binary string
@@ -70,8 +73,13 @@ function App() {
   return (
     <div className="app">
       <header className="app-header">
-        <h1>XLSX File Viewer</h1>
-        <p>Upload an Excel file to view its contents</p>
+        <div className="header-content">
+          <div>
+            <h1>{t.app.title}</h1>
+            <p>{t.app.subtitle}</p>
+          </div>
+          <LanguageSwitcher />
+        </div>
       </header>
 
       <main className="app-main">
@@ -85,7 +93,7 @@ function App() {
 
         {parsedData && (
           <div className="content-display">
-            <h2>File Contents</h2>
+            <h2>{t.app.fileContents}</h2>
             <div className="table-wrapper">
                 <TreeTable data={parsedData} />
             </div>

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { DetailedInfo } from "./DetailedInfo";
 import { TableRow } from "../types/data";
+import { useTranslation } from "../i18n/TranslationContext";
 
 export function Row({ 
   node, 
@@ -11,6 +12,7 @@ export function Row({
   depth?: number;
   expandAll?: boolean | null;
 }) {
+  const { t } = useTranslation();
   const [isExpanded, setIsExpanded] = useState(false);
   const hasChildren = node.children && node.children.length > 0;
   const isLeaf = node.isLeaf;
@@ -33,7 +35,7 @@ export function Row({
           <button
             className="collapse-button"
             onClick={toggleExpand}
-            aria-label={isExpanded ? "Collapse" : "Expand"}
+            aria-label={isExpanded ? t.row.collapse : t.row.expand}
           >
             {(hasChildren || isLeaf) && (
               <span className="collapse-icon">
