@@ -24,21 +24,23 @@ export default function TreeTable({ data }: {data: TableRow[]}) {
         </div>
         <table className="data-table">
           <thead>
-              <th>
-              </th> 
-              <th>
-                {t.table.headers.outlineLevel}
-              </th>  
-              <th>
-                {t.table.headers.code}
-              </th> 
-              <th>
-                {t.table.headers.name}
-              </th>
+            <tr>
+                <th>
+                </th> 
+                <th>
+                  {t.table.headers.outlineLevel}
+                </th>  
+                <th>
+                  {t.table.headers.code}
+                </th> 
+                <th>
+                  {t.table.headers.name}
+                </th>
+              </tr>
           </thead>
           <tbody>
             {data.map(node => (
-              <Row key={node.id} node={node} expandAll={expandAll} />
+              <Row key={`data_row_${node.key}`} node={node} expandAll={expandAll} />
             ))}
           </tbody>
         </table>

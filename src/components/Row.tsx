@@ -30,7 +30,7 @@ export function Row({
 
   return (
     <>
-      <tr key={node.id} className="row">
+      <tr className="row">
         <td style={{ paddingLeft: depth * 20 + 10 }}>
           <button
             className="collapse-button"
@@ -58,11 +58,11 @@ export function Row({
 
       {isExpanded && hasChildren &&
         node.children.map(child => (
-          <Row key={child.id} node={child} depth={depth + 1} expandAll={expandAll} />
+          <Row key={`data_row_${child.key}`} node={child} depth={depth + 1} expandAll={expandAll} />
         ))}
 
       {isExpanded && isLeaf &&
-          <DetailedInfo key={`detailed_info_${node.id}`} node={node} />
+          <DetailedInfo key={`detailed_info_${node.key}`} node={node} />
       }
 
     </>

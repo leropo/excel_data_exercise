@@ -11,6 +11,7 @@ export type CsvRow = {
 
 export type TableRow = {
   id: string;
+  key: number;
   data: CsvRow;
   isLeaf: boolean;
   children: Array<TableRow>

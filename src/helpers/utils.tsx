@@ -43,6 +43,8 @@ export function parseExcelFile(data: string[][]): TableRow[] {
   const root: TableRow[] = [];
   const lookup: Record<string, TableRow> = {};
 
+  let keyCounter = 0;
+
   for (const row of body) {
     const id = row[0] as string;
     const isLeaf = id.endsWith(LEAF_NODE_ENDING);
@@ -50,7 +52,7 @@ export function parseExcelFile(data: string[][]): TableRow[] {
     const isRoot = parts.length === 1;
     const parentKey = parts.slice(0, -1).join(".");
 
-    const node: TableRow = {id, data: parseValues(row), isLeaf: isLeaf, children: []};
+    const node: TableRow = {id, key:keyCounter, data: parseValues(row), isLeaf: isLeaf, children: []};
     lookup[id] = node;
 
     if (isRoot) {
@@ -63,6 +65,8 @@ export function parseExcelFile(data: string[][]): TableRow[] {
       continue;
     }
     lookup[parentKey].children.push(node);
+
+    keyCounter++;
   }
   return root;
 }
