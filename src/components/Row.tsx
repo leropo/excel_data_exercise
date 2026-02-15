@@ -1,25 +1,46 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { DetailedInfo } from "./DetailedInfo";
 import { TableRow } from "../types/types";
 
-export function Row({ node, depth = 0 }: { node: TableRow; depth?: number }) {
-  const [open, setOpen] = useState(false);
+export function Row({ 
+  node, 
+  depth = 0, 
+  expandAll = null 
+}: { 
+  node: TableRow; 
+  depth?: number;
+  expandAll?: boolean | null;
+}) {
+  const [isExpanded, setIsExpanded] = useState(false);
   const hasChildren = node.children && node.children.length > 0;
+  const isLeaf = node.isLeaf;
+
+  // Sync with global expand/collapse state
+  useEffect(() => {
+    if (expandAll !== null) {
+      setIsExpanded(expandAll);
+    }
+  }, [expandAll]);
+
+  const toggleExpand = () => {
+    setIsExpanded(!isExpanded);
+  };
 
   return (
     <>
-      <tr key={node.id}
-        className="row"
-        onClick={() => hasChildren && setOpen(!open)}
-      >
-        <td 
-          style={{ paddingLeft: depth * 20 + 10}}>
-          {hasChildren && (
-            <span 
-              className="collapse-icon">
-              {open ? "▼" : "▶"}
-            </span>
-          )}
+      <tr key={node.id} className="row">
+        <td style={{ paddingLeft: depth * 20 + 10 }}>
+          <button
+            className="collapse-button"
+            onClick={toggleExpand}
+            aria-label={isExpanded ? "Collapse" : "Expand"}
+          >
+            {(hasChildren || isLeaf) && (
+              <span className="collapse-icon">
+                {isExpanded ? "▼" : "▶"}
+              </span>
+            )}
+          </button>
         </td>
         
         <td>
@@ -33,12 +54,12 @@ export function Row({ node, depth = 0 }: { node: TableRow; depth?: number }) {
         </td>
       </tr>
 
-      {open && hasChildren &&
+      {isExpanded && hasChildren &&
         node.children.map(child => (
-          <Row key={child.id} node={child} depth={depth + 1} />
+          <Row key={child.id} node={child} depth={depth + 1} expandAll={expandAll} />
         ))}
 
-      {node.isLeaf &&
+      {isExpanded && isLeaf &&
           <DetailedInfo key={`detailed_info_${node.id}`} node={node} depth={depth}  />
       }
 

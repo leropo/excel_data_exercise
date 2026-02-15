@@ -120,6 +120,73 @@
   font-weight: 600;
 }
 
+.collapse-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 8px;
+  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+  color: #667eea;
+  border-radius: 4px;
+}
+
+.collapse-button:hover {
+  background-color: #f0f0f0;
+  transform: scale(1.1);
+}
+
+.collapse-button:focus {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;
+}
+
+.collapse-icon {
+  font-size: 10px;
+  user-select: none;
+}
+
+.table-controls {
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.global-toggle-button {
+  background-color: #667eea;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.global-toggle-button:hover {
+  background-color: #5568d3;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.global-toggle-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.global-toggle-button:focus {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;
+}
+
 @media (max-width: 768px) {
   .app {
     padding: 1rem;
