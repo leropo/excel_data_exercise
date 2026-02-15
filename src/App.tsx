@@ -47,12 +47,12 @@ function App() {
         const worksheet = workbook.Sheets[firstSheetName]
         
         // Extract data from first sheet only
-        const jsonData = XLSX.utils.sheet_to_json(worksheet, { 
+        const jsonData = XLSX.utils.sheet_to_json<string[]>(worksheet, { 
           header: 1,
           defval: '',
         })
 
-        const parsedData =  parseExcelFile(jsonData as string[][]);
+        const parsedData =  parseExcelFile(jsonData);
         setParsedData(parsedData);
 
         console.log('Parsed Excel data:', jsonData)
