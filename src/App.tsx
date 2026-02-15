@@ -4,7 +4,7 @@ import * as XLSX from 'xlsx'
 import TreeTable from './components/TreeTable'
 import FileUpload from './components/FileUpload'
 import { LanguageSwitcher } from './components/LanguageSwitcher'
-import { parseExcelFile } from './helpers/utils'
+import { parseExcelFile, validateExcelFile } from './helpers/utils'
 import { XLSX_EXTENSION, XLS_EXTENSION } from './helpers/constants'
 import './styles/App.css'
 import { TableRow } from "./types/data";
@@ -17,7 +17,9 @@ function App() {
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
-    if (!file) return
+    if (!file) {
+      return
+    } 
 
     // Reset previous data
     setParsedData(null)
@@ -51,6 +53,8 @@ function App() {
           header: 1,
           defval: '',
         })
+
+        validateExcelFile(jsonData);
 
         const parsedData =  parseExcelFile(jsonData);
         setParsedData(parsedData);

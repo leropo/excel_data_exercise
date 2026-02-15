@@ -1,5 +1,7 @@
+const OUTLINE_LEVEL_FIELD = 'outline_level'
+
 const CVS_COLUMNS = [
-    { header: "Outline Level", field: "outline_level" },
+    { header: "Outline Level", field: OUTLINE_LEVEL_FIELD },
     { header: "Code", field: "code" },
     { header: "Name", field: "name" },
     { header: "Description", field: "description" },
@@ -12,5 +14,8 @@ const CVS_COLUMNS = [
 const LEAF_NODE_ENDING = '.0';
 const XLSX_EXTENSION = '.xlsx';
 const XLS_EXTENSION = '.xls';
+
+const OUTLINE_LEVEL_INDEX = CVS_COLUMNS.findIndex(column => column.field === OUTLINE_LEVEL_FIELD);
  
-export { CVS_COLUMNS, LEAF_NODE_ENDING, XLSX_EXTENSION, XLS_EXTENSION };
+
+export { CVS_COLUMNS, LEAF_NODE_ENDING, XLSX_EXTENSION, XLS_EXTENSION, OUTLINE_LEVEL_INDEX };

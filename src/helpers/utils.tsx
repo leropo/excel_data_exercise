@@ -1,5 +1,6 @@
-import { CVS_COLUMNS, LEAF_NODE_ENDING } from './constants'
+import { CVS_COLUMNS, LEAF_NODE_ENDING, OUTLINE_LEVEL_INDEX } from './constants'
 import { CsvRow, TableRow } from "../types/data";
+import { validateOutlineLevels } from '../helpers/validators'
 
 function parseValues(row: string[]): CsvRow {
   const obj = {} as CsvRow;
@@ -11,8 +12,29 @@ function parseValues(row: string[]): CsvRow {
   return obj;
 }
 
-export function validateExcelFile(file: File): boolean {
-  // TODO: Implement validation logic
+export function validateExcelFile(data: string[][]): boolean {
+  const head = data[0];
+
+  const expectedHeaders = CVS_COLUMNS.map(c => c.header);
+  const headerMatch = head.length === expectedHeaders.length &&
+    head.every((value, index) => value === expectedHeaders[index]);
+
+  if (!headerMatch) {
+    return false
+  }
+
+  console.log('headerMatch ',headerMatch)
+
+  const body = data.slice(1);
+  const errors = validateOutlineLevels(body, OUTLINE_LEVEL_INDEX)
+ 
+  console.log('errors', errors)
+  console.log('errors.length', errors.length)
+
+  if (!errors.length > 0) {
+    return false
+  }
+
   return true;
 }
 
