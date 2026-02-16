@@ -13,6 +13,16 @@ export const en = {
     },
   },
 
+  dialog: {
+    confirmOverrideTitle: "Override existing data?",
+    confirmOverrideMessage: "Data is already loaded in the table. Do you want to override the current data with a new file?",
+    errorTitle: "An error occurred",
+    buttons: {
+      confirm: "OK",
+      cancel: "Cancel",
+    },
+  },
+
   // TreeTable.tsx
   table: {
     expandAll: "Expand All",

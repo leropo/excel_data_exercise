@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import React, { useState, useRef } from 'react'
 import * as XLSX from 'xlsx'
 
 import TreeTable from './components/TreeTable'
@@ -9,12 +9,35 @@ import { XLSX_EXTENSION, XLS_EXTENSION } from './helpers/constants'
 import './styles/App.css'
 import { TableRow } from "./types/data";
 import { useTranslation } from './i18n/TranslationContext'
+import Dialog from './components/Dialog'
+
+type DialogState =
+  | {
+      type: 'confirm'
+      title: string
+      message: string
+      onConfirm: () => void
+    }
+  | {
+      type: 'error'
+      title: string
+      message: string
+    }
+  | null
 
 function App() {
   const { t } = useTranslation()
   const fileInputRef = useRef(null);
   const [parsedData, setParsedData] = useState<TableRow[] | null>(null)
-  const [error, setError] = useState<string | null>(null)
+  const [dialog, setDialog] = useState<DialogState>(null)
+
+  const showErrorDialog = (message: string) => {
+    setDialog({
+      type: 'error',
+      title: (t as any).dialog.errorTitle,
+      message,
+    })
+  }
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
@@ -22,13 +45,10 @@ function App() {
       return
     } 
 
-    // Reset previous data
-    setParsedData(null)
-    setError(null)
-
     // Validate file type
     if (!file.name.endsWith(XLSX_EXTENSION) && !file.name.endsWith(XLS_EXTENSION)) {
-      setError(t.app.errors.invalidFileType)
+      const message = t.app.errors.invalidFileType
+      showErrorDialog(message)
       return
     }
 
@@ -38,7 +58,8 @@ function App() {
       try {
         const data = e.target?.result
         if (!data) {
-          setError(t.app.errors.failedToRead)
+          const message = t.app.errors.failedToRead
+          showErrorDialog(message)
           return
         }
 
@@ -61,12 +82,14 @@ function App() {
 
       } catch (err) {
         console.error('Error parsing file:', err)
-        setError(t.app.errors.failedToParse)
+        const message = t.app.errors.failedToParse
+        showErrorDialog(message)
       }
     }
 
     reader.onerror = () => {
-      setError(t.app.errors.errorReading)
+      const message = t.app.errors.errorReading
+      showErrorDialog(message)
     }
 
     // Read file as binary string
@@ -74,16 +97,27 @@ function App() {
   }
 
 
-  const checkExistingData = (e) => {
+  const checkExistingData = () => {
     const needsConfirmation = parsedData && parsedData.length > 0
     if (needsConfirmation) {
-      const ok = window.confirm("Data already exists in table, override current data?");      
-      if (!ok) {
-        return;
-      } 
+      setDialog({
+        type: 'confirm',
+        title: (t as any).dialog.confirmOverrideTitle,
+        message: (t as any).dialog.confirmOverrideMessage,
+        onConfirm: () => {
+          setDialog(null)
+          // After confirmation we trigger file selection
+          if (fileInputRef.current) {
+            (fileInputRef.current as HTMLInputElement).click()
+          }
+        },
+      })
+      return
     }
 
-    fileInputRef.current.click();
+    if (fileInputRef.current) {
+      (fileInputRef.current as HTMLInputElement).click()
+    }
   };
 
 
@@ -102,12 +136,6 @@ function App() {
       <main className="app-main">
         <FileUpload ref={fileInputRef}  handleFileUpload={handleFileUpload} checkExistingData={checkExistingData} />
 
-        {error && (
-          <div className="error-message">
-            {error}
-          </div>
-        )}
-
         {parsedData && (
           <div className="content-display">
             <h2>{t.app.fileContents}</h2>
@@ -117,6 +145,26 @@ function App() {
           </div>
         )}
       </main>
+
+      <Dialog
+        isOpen={dialog !== null}
+        type={dialog?.type === 'error' ? 'error' : 'confirm'}
+        title={dialog?.title}
+        confirmLabel={(t as any).dialog.buttons.confirm}
+        cancelLabel={(t as any).dialog.buttons.cancel}
+        onConfirm={() => {
+          if (dialog?.type === 'confirm' && dialog.onConfirm) {
+            dialog.onConfirm()
+          } else {
+            setDialog(null)
+          }
+        }}
+        onCancel={() => {
+          setDialog(null)
+        }}
+      >
+        {dialog?.message}
+      </Dialog>
     </div>
   )
 }

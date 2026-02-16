@@ -1,15 +1,17 @@
 import { XLSX_EXTENSION, XLS_EXTENSION } from '../helpers/constants'
-import {FileUploadProps} from '../types/htmlElements'
 import { useTranslation } from '../i18n/TranslationContext'
-import { forwardRef } from "react";
+import React, { forwardRef } from "react";
+type FileUploadProps = {
+  handleFileUpload: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  checkExistingData: () => void;
+};
 
-
-const FileUpload = forwardRef((props, ref) => {
+const FileUpload = forwardRef<HTMLInputElement, FileUploadProps>(({ checkExistingData, handleFileUpload }, ref) => {
     const { t } = useTranslation();
     return (
         <div className="upload-section">
 
-            <button type="button" onClick={props.checkExistingData}>
+            <button type="button" onClick={checkExistingData}>
                 <svg 
                     xmlns="http://www.w3.org/2000/svg" 
                     width="24" 
@@ -34,7 +36,7 @@ const FileUpload = forwardRef((props, ref) => {
                 type="file"
                 ref={ref}
                 accept={`${XLSX_EXTENSION},${XLS_EXTENSION}`}
-                onChange={props.handleFileUpload}
+                onChange={handleFileUpload}
                 className="file-input"
                 style={{ display: "none" }}
                 />

@@ -15,6 +15,16 @@ export const sl: TranslationKeys = {
     },
   },
 
+  dialog: {
+    confirmOverrideTitle: "Prepišem obstoječe podatke?",
+    confirmOverrideMessage: "Tabela že vsebuje podatke. Ali želiš obstoječe podatke prepisati z novo datoteko?",
+    errorTitle: "Prišlo je do napake",
+    buttons: {
+      confirm: "V redu",
+      cancel: "Prekliči",
+    },
+  },
+
   // TreeTable.tsx
   table: {
     expandAll: "Razširi vse",
