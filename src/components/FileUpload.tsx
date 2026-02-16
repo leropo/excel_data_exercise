@@ -11,7 +11,7 @@ const FileUpload = forwardRef<HTMLInputElement, FileUploadProps>(({ checkExistin
     return (
         <div className="upload-section">
 
-            <button type="button" onClick={checkExistingData}>
+            <button type="button" className='upload-button' onClick={checkExistingData}>
                 <svg 
                     xmlns="http://www.w3.org/2000/svg" 
                     width="24" 

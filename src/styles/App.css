@@ -13,7 +13,7 @@
 
 .header-content {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   flex-wrap: wrap;
   gap: 1rem;
@@ -75,10 +75,15 @@
   margin: 0 auto;
 }
 
+.upload-button {
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
 .upload-section {
   display: flex;
   justify-content: center;
-  margin-bottom: 2rem;
 }
 
 .upload-label {

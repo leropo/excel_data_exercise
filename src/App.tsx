@@ -124,17 +124,14 @@ function App() {
   return (
     <div className="app">
       <header className="app-header">
-        <div className="header-content">
-          <div>
-            <h1>{t.app.title}</h1>
-            <p>{t.app.subtitle}</p>
-          </div>
+        <div className="header-content ">
+          <FileUpload ref={fileInputRef}  handleFileUpload={handleFileUpload} checkExistingData={checkExistingData} />
+
           <LanguageSwitcher />
         </div>
       </header>
 
       <main className="app-main">
-        <FileUpload ref={fileInputRef}  handleFileUpload={handleFileUpload} checkExistingData={checkExistingData} />
 
         {parsedData && (
           <div className="content-display">
