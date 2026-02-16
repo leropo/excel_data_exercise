@@ -132,10 +132,8 @@ function App() {
       </header>
 
       <main className="app-main">
-
         {parsedData && (
           <div className="content-display">
-            <h2>{t.app.fileContents}</h2>
             <div className="table-wrapper">
                 <TreeTable data={parsedData} />
             </div>
