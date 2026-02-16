@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import * as XLSX from 'xlsx'
 
 import TreeTable from './components/TreeTable'
@@ -12,6 +12,7 @@ import { useTranslation } from './i18n/TranslationContext'
 
 function App() {
   const { t } = useTranslation()
+  const fileInputRef = useRef(null);
   const [parsedData, setParsedData] = useState<TableRow[] | null>(null)
   const [error, setError] = useState<string | null>(null)
 
@@ -32,7 +33,7 @@ function App() {
     }
 
     const reader = new FileReader()
-    
+
     reader.onload = (e) => {
       try {
         const data = e.target?.result
@@ -55,11 +56,9 @@ function App() {
         })
 
         validateExcelFile(jsonData);
-
         const parsedData =  parseExcelFile(jsonData);
         setParsedData(parsedData);
 
-        console.log('Parsed Excel data:', jsonData)
       } catch (err) {
         console.error('Error parsing file:', err)
         setError(t.app.errors.failedToParse)
@@ -74,6 +73,20 @@ function App() {
     reader.readAsBinaryString(file)
   }
 
+
+  const checkExistingData = (e) => {
+    const needsConfirmation = parsedData && parsedData.length > 0
+    if (needsConfirmation) {
+      const ok = window.confirm("Data already exists in table, override current data?");      
+      if (!ok) {
+        return;
+      } 
+    }
+
+    fileInputRef.current.click();
+  };
+
+
   return (
     <div className="app">
       <header className="app-header">
@@ -87,7 +100,7 @@ function App() {
       </header>
 
       <main className="app-main">
-        <FileUpload handleFileUpload={handleFileUpload} />
+        <FileUpload ref={fileInputRef}  handleFileUpload={handleFileUpload} checkExistingData={checkExistingData} />
 
         {error && (
           <div className="error-message">
