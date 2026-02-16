@@ -33,9 +33,7 @@ export const sl: TranslationKeys = {
       outlineLevel: "Nivo Hiearhije",
       code: "Koda",
       name: "Ime",
-    },
-    removeTableOverflow: "Prikaži celotno table",
-    addTableOverflow: "Ovij tabelo"
+    }
   },
 
   // Row.tsx

@@ -15,13 +15,6 @@ export default function TreeTable({ data }: {data: TableRow[]}) {
     return (
       <div className={showWithOverflow ? "table-wrapper-scrollable" : ""}>
         <div className="table-controls">
-          <button 
-            className="global-toggle-button"
-            onClick={() => {setShowWithOverflow(!showWithOverflow)}}
-            aria-label={showWithOverflow ? t.table.removeTableOverflow : t.table.addTableOverflow}
-          >
-            {showWithOverflow ? t.table.removeTableOverflow :  t.table.addTableOverflow}
-          </button>
         </div>
 
         <div className="table-controls">
