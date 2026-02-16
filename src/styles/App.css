@@ -180,6 +180,16 @@
   font-weight: 600;
 }
 
+/* sticky style */
+.table-sticky-header thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;        /* keeps header above cells */
+  padding: 8px;
+  border-bottom: 1px solid #ccc;
+}
+
+
 .collapse-button {
   background: none;
   border: none;
@@ -213,6 +223,7 @@
   margin-bottom: 1rem;
   display: flex;
   justify-content: flex-end;
+  gap: 1rem;
 }
 
 .global-toggle-button {

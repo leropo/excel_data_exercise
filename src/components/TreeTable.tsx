@@ -5,6 +5,9 @@ import { useTranslation } from "../i18n/TranslationContext";
 
 export default function TreeTable({ data }: {data: TableRow[]}) {
     const { t } = useTranslation();
+
+    const [stickyHeader, setStrickyHeader] = useState<boolean>(false);
+
     const [expandAll, setExpandAll] = useState<boolean | null>(null);
     const [showWithOverflow, setShowWithOverflow] = useState<boolean>(true);
 
@@ -12,9 +15,22 @@ export default function TreeTable({ data }: {data: TableRow[]}) {
         setExpandAll(prev => prev === true ? false : true);
     };
 
+    const changeSticky = () => {
+      setStrickyHeader(!stickyHeader)
+    };
+
     return (
     <div>
       <div className="table-controls">
+
+      <button 
+          className="global-toggle-button"
+          onClick={changeSticky}
+          aria-label={expandAll ? t.table.collapseAll : t.table.expandAll}
+        >
+          {stickyHeader ? `Remove sticky` : `Add stickyHeader`}
+        </button>
+
         <button 
           className="global-toggle-button"
           onClick={handleToggleAll}
@@ -25,7 +41,11 @@ export default function TreeTable({ data }: {data: TableRow[]}) {
       </div>
 
       <div className={showWithOverflow ? "table-wrapper-scrollable" : ""}>
-          <table className="data-table">
+          <table  className={
+              stickyHeader
+                ? 'data-table table-sticky-header'
+                : 'data-table'
+            }>
             <thead>
               <tr>
                   <th>
