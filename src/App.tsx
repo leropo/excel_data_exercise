@@ -8,22 +8,10 @@ import { parseExcelFile, validateExcelFile } from './helpers/utils'
 import { XLSX_EXTENSION, XLS_EXTENSION } from './helpers/constants'
 import './styles/App.css'
 import { TableRow } from "./types/data";
+import { DialogState } from './types/elements'
 import { useTranslation } from './i18n/TranslationContext'
 import Dialog from './components/Dialog'
 
-type DialogState =
-  | {
-      type: 'confirm'
-      title: string
-      message: string
-      onConfirm: () => void
-    }
-  | {
-      type: 'error'
-      title: string
-      message: string
-    }
-  | null
 
 function App() {
   const { t } = useTranslation()

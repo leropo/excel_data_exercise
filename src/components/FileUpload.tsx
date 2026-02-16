@@ -1,10 +1,7 @@
 import { XLSX_EXTENSION, XLS_EXTENSION } from '../helpers/constants'
 import { useTranslation } from '../i18n/TranslationContext'
 import React, { forwardRef } from "react";
-type FileUploadProps = {
-  handleFileUpload: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  checkExistingData: () => void;
-};
+import { FileUploadProps } from "../types/elements";
 
 const FileUpload = forwardRef<HTMLInputElement, FileUploadProps>(({ checkExistingData, handleFileUpload }, ref) => {
     const { t } = useTranslation();
