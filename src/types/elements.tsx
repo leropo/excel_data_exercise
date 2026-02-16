@@ -9,12 +9,12 @@ export type DialogState =
   | {
       type: 'confirm'
       title: string
-      message: string
+      message: string | React.ReactNode
       onConfirm: () => void
     }
   | {
       type: 'error'
-      title: string
-      message: string
+      title: string 
+      message: string | React.ReactNode
     }
   | null

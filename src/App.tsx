@@ -27,6 +27,34 @@ function App() {
     })
   }
 
+  const showHeaderMismatchDialog= (current: string[], expected: string[]) => {
+    setDialog({
+      type: 'error',
+      title: t.app.errors.wrongHeader,
+      message: (
+        <div style={{ overflowX: 'auto' }}>
+          <table style={{ borderCollapse: 'collapse' }}>
+            <tbody>
+              <tr>
+                <td style={{ fontWeight: 'bold', paddingRight: '1rem' }}>Provided</td>
+                {current.map((item, i) => (
+                  <td key={i} style={{ padding: '0 8px' }}>{item}</td>
+                ))}
+              </tr>
+    
+              <tr>
+                <td style={{ fontWeight: 'bold', paddingRight: '1rem' }}>Expected</td>
+                {expected.map((item, i) => (
+                  <td key={i} style={{ padding: '0 8px' }}>{item}</td>
+                ))}
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      )  
+    })
+  }
+
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
     if (!file) {
@@ -67,9 +95,7 @@ function App() {
         const errorsData = validateExcelFile(jsonData);
         if (errorsData) {
           if (errorsData.error == ERROR_TYPE_WRONG_HEADER ) {
-
-            const message = t.app.errors.wrongHeader
-            showErrorDialog(message + " PROVIDED: " + errorsData.wrong_header + " EXPECTED "+  errorsData.expected_header)
+            showHeaderMismatchDialog(errorsData.wrong_header, errorsData.expected_header)
           }
           return
         }

@@ -24,8 +24,8 @@ export function validateExcelFile(data: string[][]): Record<string, any> | null 
 
     return {
       "error": ERROR_TYPE_WRONG_HEADER,
-      "expected_header": header,
-      "wrong_header": expectedHeaders,
+      "expected_header": expectedHeaders,
+      "wrong_header": header,
     }
   }
 
