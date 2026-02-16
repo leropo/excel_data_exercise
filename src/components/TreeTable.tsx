@@ -6,13 +6,24 @@ import { useTranslation } from "../i18n/TranslationContext";
 export default function TreeTable({ data }: {data: TableRow[]}) {
     const { t } = useTranslation();
     const [expandAll, setExpandAll] = useState<boolean | null>(null);
+    const [showWithOverflow, setShowWithOverflow] = useState<boolean>(true);
 
     const handleToggleAll = () => {
         setExpandAll(prev => prev === true ? false : true);
     };
 
     return (
-      <div>
+      <div className={showWithOverflow ? "table-wrapper-scrollable" : ""}>
+        <div className="table-controls">
+          <button 
+            className="global-toggle-button"
+            onClick={() => {setShowWithOverflow(!showWithOverflow)}}
+            aria-label={showWithOverflow ? t.table.removeTableOverflow : t.table.addTableOverflow}
+          >
+            {showWithOverflow ? t.table.removeTableOverflow :  t.table.addTableOverflow}
+          </button>
+        </div>
+
         <div className="table-controls">
           <button 
             className="global-toggle-button"

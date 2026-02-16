@@ -22,6 +22,8 @@ export const en = {
       code: "Code",
       name: "Name",
     },
+    removeTableOverflow: "Show whole table",
+    addTableOverflow: "Wrap table"
   },
 
   // Row.tsx
