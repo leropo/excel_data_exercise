@@ -5,7 +5,7 @@ import TreeTable from './components/TreeTable'
 import FileUpload from './components/FileUpload'
 import { LanguageSwitcher } from './components/LanguageSwitcher'
 import { parseExcelFile, validateExcelFile } from './helpers/utils'
-import { XLSX_EXTENSION, XLS_EXTENSION } from './helpers/constants'
+import { ERROR_TYPE_WRONG_HEADER, XLSX_EXTENSION, XLS_EXTENSION } from './helpers/constants'
 import './styles/App.css'
 import { TableRow } from "./types/data";
 import { DialogState } from './types/elements'
@@ -64,7 +64,20 @@ function App() {
           defval: '',
         })
 
-        validateExcelFile(jsonData);
+        const errorsData = validateExcelFile(jsonData);
+        if (errorsData) {
+          if (errorsData.error == ERROR_TYPE_WRONG_HEADER ) {
+
+            const message = t.app.errors.wrongHeader
+            showErrorDialog(message + " PROVIDED: " + errorsData.wrong_header + " EXPECTED "+  errorsData.expected_header)
+          }
+
+
+          return
+        }
+
+
+
         const parsedData =  parseExcelFile(jsonData);
         setParsedData(parsedData);
 

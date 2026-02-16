@@ -10,6 +10,7 @@ export const en = {
       failedToRead: "Failed to read file",
       failedToParse: "Failed to parse Excel file. Please ensure it is a valid file.",
       errorReading: "Error reading file",
+      wrongHeader: "Wrong header file",
     },
   },
 
