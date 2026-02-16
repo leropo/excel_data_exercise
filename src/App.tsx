@@ -71,15 +71,11 @@ function App() {
             const message = t.app.errors.wrongHeader
             showErrorDialog(message + " PROVIDED: " + errorsData.wrong_header + " EXPECTED "+  errorsData.expected_header)
           }
-
-
           return
         }
 
-
-
         const parsedData =  parseExcelFile(jsonData);
-        setParsedData(parsedData);
+        setParsedData(parsedData);        
 
       } catch (err) {
         console.error('Error parsing file:', err)
@@ -95,6 +91,11 @@ function App() {
 
     // Read file as binary string
     reader.readAsBinaryString(file)
+
+
+    // Reset input value, so that same file can be reuploaded because of on change event
+    event.target.value = "";
+
   }
 
 
