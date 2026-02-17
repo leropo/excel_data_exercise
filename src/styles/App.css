@@ -2,13 +2,13 @@
   width: 100%;
   min-height: 100vh;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  padding: 2rem;
+  padding: 0.5rem;
 }
 
 .app-header {
   text-align: center;
   color: white;
-  margin-bottom: 3rem;
+  margin-bottom: 0.5rem;
 }
 
 .header-content {
@@ -71,7 +71,8 @@
 }
 
 .app-main {
-  max-width: 1200px;
+  width: 100%;
+  max-width: 1600px;
   margin: 0 auto;
 }
 
@@ -129,7 +130,7 @@
 .content-display {
   background: white;
   border-radius: 12px;
-  padding: 2rem;
+  padding: 0.5rem;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
@@ -147,7 +148,7 @@
 }
 
 .table-wrapper-scrollable {
-  max-height: 400px; 
+  max-height: 75vh; 
   overflow-y: auto;
   display: block;
 }
