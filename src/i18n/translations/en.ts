@@ -29,6 +29,7 @@ export const en = {
       errorIndex: "Index",
       errorValue: "Value",
     },
+    continueWithErrors: "Some issues were found in your file. You can still continue, but please review the errors carefully.",
   },
 
   // TreeTable.tsx

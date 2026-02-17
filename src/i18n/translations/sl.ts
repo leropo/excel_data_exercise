@@ -31,6 +31,7 @@ export const sl: TranslationKeys = {
       errorIndex: "Zap. št.",
       errorValue: "Nivo Hiearhije",
     },
+    continueWithErrors: "V vaši datoteki so bile najdene napake. Še vedno lahko nadaljujete, vendar vas prosimo, da natančno pregledate napake.",
   },
 
   // TreeTable.tsx
