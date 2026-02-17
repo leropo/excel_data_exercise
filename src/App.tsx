@@ -56,11 +56,44 @@ function App() {
   }
 
   const showCurrentLevelErrors = (errorsData: string[]) => {
-
-
-
-    // results.push({ index: i, value, errors });
-
+    setDialog({
+      type: 'error',
+      title: t.app.errors.wrongHiearhcy,
+      message:(
+        <div style={{ overflowY: 'scroll', maxHeight:'400px' }}>
+          <table>
+            <thead>
+              <tr>
+                <th>Index</th>
+                <th>Value</th>
+              </tr>
+            </thead>
+            <tbody>
+              {errorsData.map(({ index, value, errors }) => (
+                <React.Fragment key={index}>
+                  {/* Row with index + value */}
+                  <tr>
+                    <td>{index}</td>
+                    <td>{value}</td>
+                  </tr>
+      
+                  {/* Row with errors list spanning both columns */}
+                  <tr>
+                    <td colSpan={2}>
+                      <ul>
+                        {errors.map((err, i) => (
+                          <li key={i}>{err}</li>
+                        ))}
+                      </ul>
+                    </td>
+                  </tr>
+                </React.Fragment>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )
+    })
   }
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -109,9 +142,9 @@ function App() {
             showCurrentLevelErrors(errorsData.errors)
           }
           else {
-
+            // this branch means no logic for this type of error is implemented
+            showErrorDialog(errorsData.error)
           }
-
           return
         }
 
