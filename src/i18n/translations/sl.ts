@@ -30,6 +30,8 @@ export const sl: TranslationKeys = {
   table: {
     expandAll: "Razširi vse",
     collapseAll: "Združi vse",
+    pinHeader: "Fiksiraj Glavo",
+    unpinHeader: "Odpni Glavo",
     headers: {
       outlineLevel: "Nivo Hiearhije",
       code: "Koda",

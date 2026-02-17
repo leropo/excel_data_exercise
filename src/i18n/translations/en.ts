@@ -28,6 +28,8 @@ export const en = {
   table: {
     expandAll: "Expand All",
     collapseAll: "Collapse All",
+    pinHeader : "Pin Header",
+    unpinHeader : "Unpin Header",
     headers: {
       outlineLevel: "Outline Level",
       code: "Code",

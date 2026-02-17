@@ -22,13 +22,12 @@ export default function TreeTable({ data }: {data: TableRow[]}) {
     return (
     <div>
       <div className="table-controls">
-
       <button 
           className="global-toggle-button"
           onClick={changeSticky}
-          aria-label={expandAll ? t.table.collapseAll : t.table.expandAll}
+          aria-label={stickyHeader ? t.table.unpinHeader : t.table.pinHeader}
         >
-          {stickyHeader ? `Remove sticky` : `Add stickyHeader`}
+          {stickyHeader ? t.table.unpinHeader : t.table.pinHeader}
         </button>
 
         <button 
