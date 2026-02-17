@@ -4,7 +4,8 @@ import * as XLSX from 'xlsx'
 import TreeTable from './components/TreeTable'
 import FileUpload from './components/FileUpload'
 import { LanguageSwitcher } from './components/LanguageSwitcher'
-import { parseExcelFile, validateExcelFile } from './helpers/utils'
+import { parseExcelFile, validateExcelFile } from './helpers/parseUtils'
+import { generateErrorListing, generateHeaderDifferences } from './helpers/jsxUtils'
 import { ERROR_TYPE_WRONG_HEADER, ERROR_TYPE_WRONG_OUTLINE, XLSX_EXTENSION, XLS_EXTENSION } from './helpers/constants'
 import './styles/App.css'
 import { TableRow } from "./types/data";
@@ -27,72 +28,20 @@ function App() {
     })
   }
 
-  const showHeaderMismatchDialog= (current: string[], expected: string[]) => {
-    setDialog({
-      type: 'error',
-      title: t.app.errors.wrongHeader,
-      message: (
-        <div style={{ overflowX: 'auto' }}>
-          <table style={{ borderCollapse: 'collapse' }}>
-            <tbody>
-              <tr>
-                <td style={{ fontWeight: 'bold', paddingRight: '1rem' }}>Provided</td>
-                {current.map((item, i) => (
-                  <td key={i} style={{ padding: '0 8px' }}>{item}</td>
-                ))}
-              </tr>
-    
-              <tr>
-                <td style={{ fontWeight: 'bold', paddingRight: '1rem' }}>Expected</td>
-                {expected.map((item, i) => (
-                  <td key={i} style={{ padding: '0 8px' }}>{item}</td>
-                ))}
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      )  
-    })
+  const generateTableFromExcelData = (jsonData: string[][]) => {
+    const parsedData =  parseExcelFile(jsonData);
+    setParsedData(parsedData);
   }
 
-  const showCurrentLevelErrors = (errorsData: string[]) => {
+  const confirmParsingBecauseOfErrors = (title: string, message: React.ReactNode, excelData: string[][]) => {
     setDialog({
-      type: 'error',
-      title: t.app.errors.wrongHiearhcy,
-      message:(
-        <div style={{ overflowY: 'scroll', maxHeight:'400px' }}>
-          <table>
-            <thead>
-              <tr>
-                <th>Index</th>
-                <th>Value</th>
-              </tr>
-            </thead>
-            <tbody>
-              {errorsData.map(({ index, value, errors }) => (
-                <React.Fragment key={index}>
-                  {/* Row with index + value */}
-                  <tr>
-                    <td>{index}</td>
-                    <td>{value}</td>
-                  </tr>
-      
-                  {/* Row with errors list spanning both columns */}
-                  <tr>
-                    <td colSpan={2}>
-                      <ul>
-                        {errors.map((err, i) => (
-                          <li key={i}>{err}</li>
-                        ))}
-                      </ul>
-                    </td>
-                  </tr>
-                </React.Fragment>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )
+      type: 'confirm',
+      title: title,
+      message: message,
+      onConfirm:  () => {
+        generateTableFromExcelData(excelData)
+        setDialog(null)    
+      }
     })
   }
 
@@ -128,18 +77,22 @@ function App() {
         const worksheet = workbook.Sheets[firstSheetName]
         
         // Extract data from first sheet only
-        const jsonData = XLSX.utils.sheet_to_json<string[]>(worksheet, { 
+        const excelData = XLSX.utils.sheet_to_json<string[]>(worksheet, { 
           header: 1,
           defval: '',
         })
 
-        const errorsData = validateExcelFile(jsonData);
+        const errorsData = validateExcelFile(excelData);
         if (errorsData.error) {
           if (errorsData.error == ERROR_TYPE_WRONG_HEADER ) {
-            showHeaderMismatchDialog(errorsData.wrong_header, errorsData.expected_header)
+            confirmParsingBecauseOfErrors(t.app.errors.wrongHeader,
+              generateHeaderDifferences(errorsData.wrong_header, errorsData.expected_header),
+               excelData)
           }
           else if (errorsData.error == ERROR_TYPE_WRONG_OUTLINE ) {
-            showCurrentLevelErrors(errorsData.errors)
+            confirmParsingBecauseOfErrors(t.app.errors.wrongHiearhcy,
+               generateErrorListing(errorsData.errors), 
+               excelData)
           }
           else {
             // this branch means no logic for this type of error is implemented
@@ -148,8 +101,7 @@ function App() {
           return
         }
 
-        const parsedData =  parseExcelFile(jsonData);
-        setParsedData(parsedData);        
+        generateTableFromExcelData(excelData)
 
       } catch (err) {
         console.error('Error parsing file:', err)
