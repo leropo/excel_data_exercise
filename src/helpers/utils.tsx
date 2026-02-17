@@ -12,7 +12,7 @@ function parseValues(row: string[]): CsvRow {
   return obj;
 }
 
-export function validateExcelFile(data: string[][]): Record<string, any> | null {
+export function validateExcelFile(data: string[][]): Record<string, any> {
   const header = data[0];
 
   const expectedHeaders = CVS_COLUMNS.map(c => c.header);
@@ -33,9 +33,6 @@ export function validateExcelFile(data: string[][]): Record<string, any> | null 
   const body = data.slice(1);
   const errors = validateOutlineLevels(body, OUTLINE_LEVEL_INDEX)
  
-  //console.log('errors', errors)
-  //console.log('errors.length', errors.length)
-
   if (errors.length > 0) {
      return {
       "error": ERROR_TYPE_WRONG_OUTLINE,
@@ -43,7 +40,7 @@ export function validateExcelFile(data: string[][]): Record<string, any> | null 
     }
   }
 
-  return null;
+  return {};
 }
 
 export function parseExcelFile(data: string[][]): TableRow[] {

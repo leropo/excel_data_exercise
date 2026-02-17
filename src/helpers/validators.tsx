@@ -44,7 +44,7 @@
     If  is deeper → Leaf violation
 */
 
-export function validateOutlineLevels(list: string[][], levelIndex: number): any[] {
+export function validateOutlineLevels(list: string[][], outlineLevelColumnIndex: number): any[] {
     const results = [];
 
     function parse(item: string) {
@@ -64,7 +64,7 @@ export function validateOutlineLevels(list: string[][], levelIndex: number): any
     }
 
     for (let i = 0; i < list.length; i++) {
-        const value = list[i][levelIndex];
+        const value = list[i][outlineLevelColumnIndex];
         const errors = [];
 
         // ---------------------------
@@ -72,15 +72,20 @@ export function validateOutlineLevels(list: string[][], levelIndex: number): any
         // ---------------------------
         const parts = parse(value);
 
+        // could this part already include validator text instead of codes
+
         if (parts.length === 0) {
+            // problem is empty string
             errors.push("Format error: empty string");
         }
 
         if (!isDigits(parts[0])) {
+            // problem it starts with digit
             errors.push("Format error: must start with a digit");
         }
 
         for (const p of parts) {
+            // problem not a number
             if (!isDigits(p)) {
                 errors.push(`Format error: non-digit segment '${p}'`);
             }
@@ -99,7 +104,7 @@ export function validateOutlineLevels(list: string[][], levelIndex: number): any
         // ---------------------------
         // Rule B/C/D — Hierarchy rules
         // ---------------------------
-        const prev = parse(list[i - 1][levelIndex]);
+        const prev = parse(list[i - 1][outlineLevelColumnIndex]);
         const curr = parts;
 
         const prevIsLeaf = prev[prev.length - 1] === "0";
@@ -116,7 +121,7 @@ export function validateOutlineLevels(list: string[][], levelIndex: number): any
         const prefixOK = prefixMatches(curr, prev.slice(0, minLen));
 
         if (!prefixOK) {
-            errors.push("Hierarchy error: invalid branch transition");
+            //errors.push("Hierarchy error: invalid branch transition");
         } else {
             // Same level
             if (curr.length === prev.length) {
@@ -128,13 +133,16 @@ export function validateOutlineLevels(list: string[][], levelIndex: number): any
                 }
             }
 
-            // Going deeper            
+            // Going deeper    
+
+             /*
             if (curr.length > prev.length) {
                 const firstNew = parseInt(curr[prev.length], 10);
                 if (firstNew !== 1) {
                     errors.push("Hierarchy error: when descending, new level must start at 1");
                 }
             }
+            */
 
             // Going up
             if (curr.length < prev.length) {

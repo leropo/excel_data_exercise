@@ -12,7 +12,8 @@ export const sl: TranslationKeys = {
       failedToRead: "Napaka pri branju datotke",
       failedToParse: "Napaka pri parsanju Excel datoteke. Preveri pravilnost datoteke.",
       errorReading: "Napaka pri branju datotke",
-      wrongHeader: "Wrong header file",
+      wrongHeader: "Napačna vrstica kolon",
+      wrongHiearhcy: "Napačna hiearhija nivojev",
     },
   },
 

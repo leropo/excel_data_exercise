@@ -5,7 +5,7 @@ import TreeTable from './components/TreeTable'
 import FileUpload from './components/FileUpload'
 import { LanguageSwitcher } from './components/LanguageSwitcher'
 import { parseExcelFile, validateExcelFile } from './helpers/utils'
-import { ERROR_TYPE_WRONG_HEADER, XLSX_EXTENSION, XLS_EXTENSION } from './helpers/constants'
+import { ERROR_TYPE_WRONG_HEADER, ERROR_TYPE_WRONG_OUTLINE, XLSX_EXTENSION, XLS_EXTENSION } from './helpers/constants'
 import './styles/App.css'
 import { TableRow } from "./types/data";
 import { DialogState } from './types/elements'
@@ -55,6 +55,14 @@ function App() {
     })
   }
 
+  const showCurrentLevelErrors = (errorsData: string[]) => {
+
+
+
+    // results.push({ index: i, value, errors });
+
+  }
+
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
     if (!file) {
@@ -93,10 +101,17 @@ function App() {
         })
 
         const errorsData = validateExcelFile(jsonData);
-        if (errorsData) {
+        if (errorsData.error) {
           if (errorsData.error == ERROR_TYPE_WRONG_HEADER ) {
             showHeaderMismatchDialog(errorsData.wrong_header, errorsData.expected_header)
           }
+          else if (errorsData.error == ERROR_TYPE_WRONG_OUTLINE ) {
+            showCurrentLevelErrors(errorsData.errors)
+          }
+          else {
+
+          }
+
           return
         }
 

@@ -189,6 +189,12 @@
   border-bottom: 1px solid #ccc;
 }
 
+.dialog-error .dialog-title {
+  background-color: #ff6b6b;
+  border-radius: 6px 6px 0 0;
+  color: white;
+  padding: 0.5rem;
+}
 
 .collapse-button {
   background: none;
