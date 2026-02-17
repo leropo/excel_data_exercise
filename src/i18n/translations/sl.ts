@@ -25,6 +25,12 @@ export const sl: TranslationKeys = {
       confirm: "V redu",
       cancel: "Prekliči",
     },
+    table: {
+      currentHeader: "Naloženo",
+      expectedHeader: "Pravilno",
+      errorIndex: "Zap. št.",
+      errorValue: "Nivo Hiearhije",
+    },
   },
 
   // TreeTable.tsx

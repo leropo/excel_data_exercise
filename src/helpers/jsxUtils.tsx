@@ -1,13 +1,19 @@
 import React from 'react'
 
-export function generateErrorListing(errorsData: string[]): React.ReactNode {
+export function generateErrorListing(errorsData: string[],   
+   t: React.Context<any>,
+): React.ReactNode {
     return (
         <div style={{ overflowY: 'scroll', maxHeight:'400px' }}>
           <table>
             <thead>
               <tr>
-                <th>Index</th>
-                <th>Value</th>
+                <th>              
+                  {t.dialog.table.errorIndex}
+                </th>
+                <th>              
+                  {t.dialog.table.errorValue}
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -37,20 +43,27 @@ export function generateErrorListing(errorsData: string[]): React.ReactNode {
       )
 }
 
-export function generateHeaderDifferences(current: string[], expected: string[]): React.ReactNode {
+export function generateHeaderDifferences(current: string[],
+   expected: string[], 
+   t: React.Context<any>,
+): React.ReactNode {
     return (
     <div style={{ overflowX: 'auto' }}>
       <table style={{ borderCollapse: 'collapse' }}>
         <tbody>
           <tr>
-            <td style={{ fontWeight: 'bold', paddingRight: '1rem' }}>Provided</td>
+            <td style={{ fontWeight: 'bold', paddingRight: '1rem' }}>
+              {t.dialog.table.currentHeader}
+              </td>
             {current.map((item, i) => (
               <td key={i} style={{ padding: '0 8px' }}>{item}</td>
             ))}
           </tr>
 
           <tr>
-            <td style={{ fontWeight: 'bold', paddingRight: '1rem' }}>Expected</td>
+            <td style={{ fontWeight: 'bold', paddingRight: '1rem' }}>
+              {t.dialog.table.expectedHeader}
+            </td>
             {expected.map((item, i) => (
               <td key={i} style={{ padding: '0 8px' }}>{item}</td>
             ))}

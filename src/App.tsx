@@ -28,11 +28,6 @@ function App() {
     })
   }
 
-  const generateTableFromExcelData = (jsonData: string[][]) => {
-    const parsedData =  parseExcelFile(jsonData);
-    setParsedData(parsedData);
-  }
-
   const confirmParsingBecauseOfErrors = (title: string, message: React.ReactNode, excelData: string[][]) => {
     setDialog({
       type: 'confirm',
@@ -44,6 +39,12 @@ function App() {
       }
     })
   }
+
+  const generateTableFromExcelData = (jsonData: string[][]) => {
+    const parsedData =  parseExcelFile(jsonData);
+    setParsedData(parsedData);
+  }
+
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
@@ -86,12 +87,15 @@ function App() {
         if (errorsData.error) {
           if (errorsData.error == ERROR_TYPE_WRONG_HEADER ) {
             confirmParsingBecauseOfErrors(t.app.errors.wrongHeader,
-              generateHeaderDifferences(errorsData.wrong_header, errorsData.expected_header),
+              generateHeaderDifferences(
+                errorsData.wrong_header, 
+                errorsData.expected_header, 
+                t),
                excelData)
           }
           else if (errorsData.error == ERROR_TYPE_WRONG_OUTLINE ) {
             confirmParsingBecauseOfErrors(t.app.errors.wrongHiearhcy,
-               generateErrorListing(errorsData.errors), 
+               generateErrorListing(errorsData.errors, t), 
                excelData)
           }
           else {

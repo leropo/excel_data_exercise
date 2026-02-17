@@ -23,6 +23,12 @@ export const en = {
       confirm: "OK",
       cancel: "Cancel",
     },
+    table: {
+      currentHeader: "Uploaded",
+      expectedHeader: "Expected",
+      errorIndex: "Index",
+      errorValue: "Value",
+    },
   },
 
   // TreeTable.tsx
