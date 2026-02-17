@@ -2,7 +2,7 @@ import { createContext, useContext, ReactNode, useState, useEffect } from 'react
 import { translations, defaultLocale, type Locale, supportedLocales } from './translations';
 import type { TranslationKeys } from './translations/en';
 
-interface TranslationContextType {
+export interface TranslationContextType {
   t: TranslationKeys;
   locale: Locale;
   setLocale: (locale: Locale) => void;

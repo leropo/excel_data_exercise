@@ -1,7 +1,8 @@
 import React from 'react'
+import {TranslationContextType} from '../i18n/TranslationContext'
 
 export function generateErrorListing(errorsData: string[],   
-   t: React.Context<any>,
+   t: React.Context<TranslationContextType>,
 ): React.ReactNode {
     return (
         <div style={{ overflowY: 'scroll', maxHeight:'400px' }}>
@@ -45,7 +46,7 @@ export function generateErrorListing(errorsData: string[],
 
 export function generateHeaderDifferences(current: string[],
    expected: string[], 
-   t: React.Context<any>,
+   t: React.Context<TranslationContextType>,
 ): React.ReactNode {
     return (
     <div style={{ overflowX: 'auto' }}>
