@@ -1,49 +1,3 @@
-/**
-
- Validation Algorithm (Step‑by‑Step)
-    Below is a clear algorithm you can implement in any language.
-
-    1. Parse each string
-    Split by  and check:
-    • 	Every segment is digits only
-    • 	No empty segments
-    • 	First segment exists and is a digit
-    If any fail → Format error
-
-    2. Compare with previous item
-    Let:
-
-    Case 1 — Same length
-    You must match all but the last segment:
-    • 	If all previous segments match
-    • 	And last segment is:
-    • 	equal → allowed (leaf repetition)
-    • 	or incremented by 1 → allowed
-    • 	else → Hierarchy error
-
-    Case 2 — Going deeper (curr longer than prev)
-    Allowed only if:
-    • 	 starts with all segments of 
-    • 	And the first new segment is 1
-    (because you always start a new child at 1)
-    If not → Hierarchy error
-
-    Case 3 — Going up (curr shorter than prev)
-    Allowed only if:
-    • 	 matches the prefix of 
-    • 	And last segment is:
-    • 	equal → allowed
-    • 	or incremented by 1 → allowed
-    If not → Hierarchy error
-
-    Case 4 — Leaf rule
-    If  ends with :
-    • 	 must be:
-    • 	exactly the same leaf
-    • 	OR a shorter prefix (going up)
-    If  is deeper → Leaf violation
-*/
-
 export function validateOutlineLevels(list: string[][], outlineLevelColumnIndex: number): any[] {
     const results = [];
 
@@ -55,10 +9,24 @@ export function validateOutlineLevels(list: string[][], outlineLevelColumnIndex:
         return /^[0-9]+$/.test(str);
     }
 
-    function prefixMatches(a: string[], b: string[]) {
-        if (b.length > a.length) return false;
-        for (let i = 0; i < b.length; i++) {
-            if (a[i] !== b[i]) return false;
+    /* in error display we would like to show index as in xlxs file
+       this means 1 is added because of header
+       and 1 is added because of indexing from zero
+    */
+    function convertIndexToExcel(index: number) {
+        return index + 2;
+    }
+
+    function prefixMatches(current: string[], previous: string[]) {
+        // if current is shorter, this indicates a new branch will be taken
+        // only check if current is a prefix on previous
+        // since current should not be somethign different 
+        // we have entered a completely new branch,
+        if (previous.length != current.length) {
+            return false;
+        }
+        for (let i = 0; i < previous.length; i++) {
+            if (current[i] !== previous[i]) return false;
         }
         return true;
     }
@@ -66,13 +34,11 @@ export function validateOutlineLevels(list: string[][], outlineLevelColumnIndex:
     for (let i = 0; i < list.length; i++) {
         const value = list[i][outlineLevelColumnIndex];
         const errors = [];
-
-        // ---------------------------
-        // Rule A — Format validation
-        // ---------------------------
         const parts = parse(value);
 
-        // could this part already include validator text instead of codes
+        // ---------------------------
+        //  Data format rules
+        // ---------------------------
 
         if (parts.length === 0) {
             // problem is empty string
@@ -80,7 +46,7 @@ export function validateOutlineLevels(list: string[][], outlineLevelColumnIndex:
         }
 
         if (!isDigits(parts[0])) {
-            // problem it starts with digit
+            // problem it does not have digits
             errors.push("Format error: must start with a digit");
         }
 
@@ -93,7 +59,7 @@ export function validateOutlineLevels(list: string[][], outlineLevelColumnIndex:
 
         // If format is broken, skip hierarchy checks
         if (errors.length > 0) {
-            results.push({ index: i, value, errors });
+            results.push({ index: convertIndexToExcel(i), value, errors });
             continue;
         }
 
@@ -102,63 +68,42 @@ export function validateOutlineLevels(list: string[][], outlineLevelColumnIndex:
         }
 
         // ---------------------------
-        // Rule B/C/D — Hierarchy rules
+        //  Hierarchy rules
         // ---------------------------
         const prev = parse(list[i - 1][outlineLevelColumnIndex]);
         const curr = parts;
 
         const prevIsLeaf = prev[prev.length - 1] === "0";
 
-        // Leaf rule: cannot go deeper after leaf
-        if (prevIsLeaf && curr.length > prev.length) {
+        // same length is only possible, if previous node is leaf 
+        if (curr.length == prev.length) {
+            if (!prevIsLeaf) {
+                errors.push("Hierarchy error: same length, length must among levels, unless we are in leaf node");
+            }
+            else if (prevIsLeaf && !prefixMatches(curr, prev)) {
+                errors.push("Hierarchy error: leaf is not continued correctly");
+            }
+        }
+        // shorter length for current means we have gone up in hiearchy
+        else if (curr.length < prev.length) {
+            if (prefixMatches(curr.slice(0, prev.length), prev)) {
+                errors.push("Brachning error, current is higher level, but starts the same as previous");
+            }
+        }
+        // current is longer curr.length > prev.length
+        // you cannot continue if previous if leaf node
+        else if (prevIsLeaf){
             errors.push("Leaf error: cannot descend after a leaf node ending in .0");
         }
-
-        // Compare structure
-        const minLen = Math.min(prev.length, curr.length);
-
-        // Check prefix match for allowed transitions
-        const prefixOK = prefixMatches(curr, prev.slice(0, minLen));
-
-        if (!prefixOK) {
-            //errors.push("Hierarchy error: invalid branch transition");
-        } else {
-            // Same level
-            if (curr.length === prev.length) {
-                const lastPrev = parseInt(prev[prev.length - 1], 10);
-                const lastCurr = parseInt(curr[curr.length - 1], 10);
-
-                if (!(lastCurr === lastPrev || lastCurr === lastPrev + 1)) {
-                    errors.push("Hierarchy error: same-level index must repeat or increment by 1");
-                }
-            }
-
-            // Going deeper    
-
-             /*
-            if (curr.length > prev.length) {
-                const firstNew = parseInt(curr[prev.length], 10);
-                if (firstNew !== 1) {
-                    errors.push("Hierarchy error: when descending, new level must start at 1");
-                }
-            }
-            */
-
-            // Going up
-            if (curr.length < prev.length) {
-                const lastPrev = parseInt(prev[curr.length - 1], 10);
-                const lastCurr = parseInt(curr[curr.length - 1], 10);
-
-                if (!(lastCurr === lastPrev || lastCurr === lastPrev + 1)) {
-                    errors.push("Hierarchy error: when ascending, last segment must repeat or increment by 1");
-                }
-            }
+        else if (!prefixMatches(curr.slice(0, prev.length), prev)){
+            errors.push("Hierarchy error: next level is not continued correctly, it must start with previous one.");
         }
+
 
         if (errors.length > 0) {
-            results.push({ index: i, value, errors });
+            results.push({ index: convertIndexToExcel(i), value, errors });
         }
-    }
 
+    }
     return results;
 }
