@@ -6,11 +6,6 @@ import { useTranslation } from "../i18n/TranslationContext";
 export default function TreeTable({ data }: {data: TableRow[]}) {
     const { t } = useTranslation();
     const [stickyHeader, setStrickyHeader] = useState<boolean>(false);
-    const [expandAll, setExpandAll] = useState<boolean | null>(null);
-
-    const handleToggleAll = () => {
-        setExpandAll(prev => prev === true ? false : true);
-    };
 
     const changeSticky = () => {
       setStrickyHeader(!stickyHeader)
@@ -19,7 +14,23 @@ export default function TreeTable({ data }: {data: TableRow[]}) {
     return (
     <div>
       <div className="table-controls">
-      <button 
+
+        <button 
+            className="global-toggle-button"
+            onClick={()=>{}}
+            aria-label={t.table.expandAll}
+          >
+            {`${t.table.expandAll}`}
+        </button>
+        <button 
+            className="global-toggle-button"
+            onClick={()=>{}}
+            aria-label={t.table.collapseAll}
+          >
+            {`${t.table.collapseAll}`}
+        </button>
+        
+        <button 
           className="global-toggle-button"
           onClick={changeSticky}
           aria-label={stickyHeader ? t.table.unpinHeader : t.table.pinHeader}
@@ -27,13 +38,6 @@ export default function TreeTable({ data }: {data: TableRow[]}) {
           {stickyHeader ? t.table.unpinHeader : t.table.pinHeader}
         </button>
 
-        <button 
-          className="global-toggle-button"
-          onClick={handleToggleAll}
-          aria-label={expandAll ? t.table.collapseAll : t.table.expandAll}
-        >
-          {expandAll ? `▼ ${t.table.collapseAll}` : `▶ ${t.table.expandAll}`}
-        </button>
       </div>
 
       <div className="table-wrapper-scrollable">
@@ -59,7 +63,7 @@ export default function TreeTable({ data }: {data: TableRow[]}) {
             </thead>
             <tbody>
               {data.map(node => (
-                <Row key={`data_row_${node.key}`} node={node} expandAll={expandAll} />
+                <Row key={`data_row_${node.key}`} node={node} />
               ))}
             </tbody>
           </table>

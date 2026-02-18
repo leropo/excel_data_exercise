@@ -9,10 +9,11 @@ import { generateErrorListing, generateHeaderDifferences } from './helpers/jsxUt
 import { mapTreeToUiState } from './helpers/mappers'
 import { ERROR_TYPE_WRONG_HEADER, ERROR_TYPE_WRONG_OUTLINE, XLSX_EXTENSION, XLS_EXTENSION } from './helpers/constants'
 import './styles/App.css'
-import { TableRow } from "./types/data";
+import { TableRow, TreeUiState } from "./types/data";
 import { DialogState } from './types/elements'
 import { useTranslation } from './i18n/TranslationContext'
 import Dialog from './components/Dialog'
+import { TreeUiStateContext } from './contexts/TreeUiStateContext'
 
 
 function App() {
@@ -20,13 +21,22 @@ function App() {
   const fileInputRef = useRef(null);
 
   const [treeData, setTreeData] = useState<TableRow[]>([])
-  const [uiState, setUiState] = useState({})
+  const [uiState, setUiState] = useState<TreeUiState>({})
   const [dialog, setDialog] = useState<DialogState>(null)
 
   // whenever treeData changes, update uiState
   useEffect(() => {
     setUiState(mapTreeToUiState(treeData))
   }, [treeData]);
+
+  const toggleExpand = (key: string) => {
+    setUiState(prev => ({
+      ...prev,
+      [key]: {
+        expanded: !prev[key]?.expanded
+      }
+    }))
+  }
   
 
   const showErrorDialog = (message: string) => {
@@ -163,45 +173,47 @@ function App() {
 
 
   return (
-    <div className="app">
-      <header className="app-header">
-        <div className="header-content ">
-          <FileUpload ref={fileInputRef}  handleFileUpload={handleFileUpload} checkExistingData={checkExistingData} />
+      <div className="app">
+        <header className="app-header">
+          <div className="header-content ">
+            <FileUpload ref={fileInputRef}  handleFileUpload={handleFileUpload} checkExistingData={checkExistingData} />
 
-          <LanguageSwitcher />
-        </div>
-      </header>
-
-      <main className="app-main">
-        {treeData.length > 0 && (
-          <div className="content-display">
-            <div className="table-wrapper">
-                <TreeTable data={treeData} />
-            </div>
+            <LanguageSwitcher />
           </div>
-        )}
-      </main>
+        </header>
 
-      <Dialog
-        isOpen={dialog !== null}
-        type={dialog?.type === 'error' ? 'error' : 'confirm'}
-        title={dialog?.title}
-        confirmLabel={(t as any).dialog.buttons.confirm}
-        cancelLabel={(t as any).dialog.buttons.cancel}
-        onConfirm={() => {
-          if (dialog?.type === 'confirm' && dialog.onConfirm) {
-            dialog.onConfirm()
-          } else {
+        <main className="app-main">
+          {treeData.length > 0 && (
+            <div className="content-display">
+              <div className="table-wrapper">
+                  <TreeUiStateContext.Provider value={{ uiState, toggleExpand }}>
+                    	<TreeTable data={treeData} />
+                  </TreeUiStateContext.Provider>
+              </div>
+            </div>
+          )}
+        </main>
+
+        <Dialog
+          isOpen={dialog !== null}
+          type={dialog?.type === 'error' ? 'error' : 'confirm'}
+          title={dialog?.title}
+          confirmLabel={(t as any).dialog.buttons.confirm}
+          cancelLabel={(t as any).dialog.buttons.cancel}
+          onConfirm={() => {
+            if (dialog?.type === 'confirm' && dialog.onConfirm) {
+              dialog.onConfirm()
+            } else {
+              setDialog(null)
+            }
+          }}
+          onCancel={() => {
             setDialog(null)
-          }
-        }}
-        onCancel={() => {
-          setDialog(null)
-        }}
-      >
-        {dialog?.message}
-      </Dialog>
-    </div>
+          }}
+        >
+          {dialog?.message}
+        </Dialog>
+      </div>
   )
 }
 

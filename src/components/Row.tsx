@@ -1,31 +1,23 @@
-import { useState, useEffect } from "react";
 import { DetailedInfo } from "./DetailedInfo";
 import { TableRow } from "../types/data";
 import { useTranslation } from "../i18n/TranslationContext";
+import { useTreeUiState } from "../contexts/TreeUiStateContext";
 
 export function Row({ 
   node, 
-  depth = 0, 
-  expandAll = null 
+  depth = 0
 }: { 
   node: TableRow; 
   depth?: number;
-  expandAll?: boolean | null;
 }) {
   const { t } = useTranslation();
-  const [isExpanded, setIsExpanded] = useState(false);
+  const { uiState, toggleExpand } = useTreeUiState();
   const hasChildren = node.children && node.children.length > 0;
   const isLeaf = node.isLeaf;
+  const isExpanded = uiState[node.key]?.expanded ?? false;
 
-  // Sync with global expand/collapse state
-  useEffect(() => {
-    if (expandAll !== null) {
-      setIsExpanded(expandAll);
-    }
-  }, [expandAll]);
-
-  const toggleExpand = () => {
-    setIsExpanded(!isExpanded);
+  const handleToggleExpand = () => {
+    toggleExpand(node.key);
   };
 
   return (
@@ -34,7 +26,7 @@ export function Row({
         <td style={{ paddingLeft: depth * 20 + 10 }}>
           <button
             className="collapse-button"
-            onClick={toggleExpand}
+            onClick={handleToggleExpand}
             aria-label={isExpanded ? t.row.collapse : t.row.expand}
           >
             {(hasChildren || isLeaf) && (
@@ -58,7 +50,7 @@ export function Row({
 
       {isExpanded && hasChildren &&
         node.children.map(child => (
-          <Row key={`data_row_${child.key}`} node={child} depth={depth + 1} expandAll={expandAll} />
+          <Row key={`data_row_${child.key}`} node={child} depth={depth + 1} />
         ))}
 
       {isExpanded && isLeaf &&
