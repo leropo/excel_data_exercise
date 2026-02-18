@@ -17,7 +17,9 @@ import Dialog from './components/Dialog'
 function App() {
   const { t } = useTranslation()
   const fileInputRef = useRef(null);
-  const [parsedData, setParsedData] = useState<TableRow[] | null>(null)
+
+  const [treeData, setTreeData] = useState<TableRow[]>([])
+  const [uiState, setUiState] = useState({})
   const [dialog, setDialog] = useState<DialogState>(null)
 
   const showErrorDialog = (message: string) => {
@@ -41,8 +43,8 @@ function App() {
   }
 
   const generateTableFromExcelData = (jsonData: string[][]) => {
-    const parsedData =  parseExcelFile(jsonData);
-    setParsedData(parsedData);
+    const treeData =  parseExcelFile(jsonData);
+    setTreeData(treeData);
   }
 
 
@@ -130,7 +132,7 @@ function App() {
 
 
   const checkExistingData = () => {
-    const needsConfirmation = parsedData && parsedData.length > 0
+    const needsConfirmation = treeData.length > 0
     if (needsConfirmation) {
       setDialog({
         type: 'confirm',
@@ -164,10 +166,10 @@ function App() {
       </header>
 
       <main className="app-main">
-        {parsedData && (
+        {treeData.length > 0 && (
           <div className="content-display">
             <div className="table-wrapper">
-                <TreeTable data={parsedData} />
+                <TreeTable data={treeData} />
             </div>
           </div>
         )}

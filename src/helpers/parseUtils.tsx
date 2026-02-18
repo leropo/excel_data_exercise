@@ -1,5 +1,5 @@
 import { CVS_COLUMNS, LEAF_NODE_ENDING, OUTLINE_LEVEL_INDEX, ERROR_TYPE_WRONG_HEADER, ERROR_TYPE_WRONG_OUTLINE } from './constants'
-import { CsvRow, TableRow } from "../types/data";
+import { CsvRow, TableRow, UnkeyedRow } from "../types/data";
 import { validateOutlineLevels } from './validators'
 
 function parseValues(row: string[]): CsvRow {
@@ -12,9 +12,29 @@ function parseValues(row: string[]): CsvRow {
   return obj;
 }
 
+function assignAutoKeys(
+  nodes: UnkeyedRow[],
+  parentKey: string = ""
+): TableRow[] {
+  let counter = 1;
+
+  const result: TableRow[] = nodes.map((node) => {
+    const key = parentKey ? `${parentKey}/${counter}` : `${counter}`;
+    counter++;
+
+    const children = node.children.length
+      ? assignAutoKeys(node.children, key)
+      : [];
+
+    return {key: key, data: node.data,  isLeaf: node.isLeaf, children}
+  });
+
+  return result;
+}
+
+
 export function validateExcelFile(data: string[][]): Record<string, any> {
   const header = data[0];
-
   const expectedHeaders = CVS_COLUMNS.map(c => c.header);
   const headerMatch = header.length === expectedHeaders.length &&
     header.every((value, index) => value === expectedHeaders[index]);
@@ -42,33 +62,35 @@ export function validateExcelFile(data: string[][]): Record<string, any> {
 
 export function parseExcelFile(data: string[][]): TableRow[] {
   const body = data.slice(1);
-  const root: TableRow[] = [];
-  const lookup: Record<string, TableRow> = {};
-
-  let keyCounter = 0;
+  const root: UnkeyedRow[] = [];
+  const lookup: Record<string, UnkeyedRow> = {};
 
   for (const row of body) {
     const id = row[0] as string;
-    const isLeaf = id.endsWith(LEAF_NODE_ENDING);
     const parts = id.split(".");
+    const isLeaf = id.endsWith(LEAF_NODE_ENDING);
     const isRoot = parts.length === 1;
-    const parentKey = parts.slice(0, -1).join(".");
+    const node: UnkeyedRow = {data: parseValues(row), isLeaf: isLeaf, children: []};
 
-    const node: TableRow = {id, key:keyCounter, data: parseValues(row), isLeaf: isLeaf, children: []};
-    lookup[id] = node;
+    // lead nodes are not added lookup because their id is not unique
+    // lookup holds id of hiearchical structure
+    if (!isLeaf) {
+      lookup[id] = node;
+    }
 
     if (isRoot) {
         root.push(node);
         continue;
     }
+
+    const parentKey = parts.slice(0, -1).join(".");
     const parent = lookup[parentKey];
     // If parent does not exists skip, it is currently assumed that data is correctly sorted
     if (!parent) {
       continue;
     }
     lookup[parentKey].children.push(node);
-
-    keyCounter++;
   }
-  return root;
+
+  return assignAutoKeys(root);
 }

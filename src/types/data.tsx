@@ -9,10 +9,15 @@ export type CsvRow = {
   element_query: string;
 };
 
-export type TableRow = {
-  id: string;
-  key: number;
+export type UnkeyedRow = {
   data: CsvRow;
   isLeaf: boolean;
+  children: Array<UnkeyedRow>;
+};
+
+export type TableRow = {
+  key: string;
+  isLeaf: boolean;
+  data: CsvRow;
   children: Array<TableRow>
 };
