@@ -6,7 +6,7 @@ import Dialog from './components/Dialog'
 import TreeTable from './components/TreeTable'
 import FileUpload from './components/FileUpload'
 import { LanguageSwitcher } from './components/LanguageSwitcher'
-import { TreeUiStateContext, TreeUiStateAction } from './contexts/TreeUiStateContext'
+import { TreeUiStateContext, treeUiStateReducer } from './contexts/TreeUiStateContext'
 import { useTranslation } from './i18n/TranslationContext'
 
 import { parseExcelFile, validateExcelFile } from './helpers/parseUtils'
@@ -15,32 +15,8 @@ import { mapTreeToUiState } from './helpers/mappers'
 
 import { ERROR_TYPE_WRONG_HEADER, ERROR_TYPE_WRONG_OUTLINE, XLSX_EXTENSION, XLS_EXTENSION } from './constants/xlsx'
 import { TreeUiActionTypes } from './constants/uistate'
-import { TableRow, TreeUiState } from "./types/data";
+import { TableRow } from "./types/data";
 import { DialogState } from './types/elements'
-
-function treeUiStateReducer(state: TreeUiState, action: TreeUiStateAction): TreeUiState {
-  switch (action.type) {
-    case TreeUiActionTypes.TOGGLE_EXPAND:
-      return {
-        ...state,
-        [action.key]: {
-          expanded: !state[action.key]?.expanded
-        }
-      }
-    case TreeUiActionTypes.EXPAND_ALL:
-      return Object.fromEntries(
-        Object.keys(state).map(key => [key, { expanded: true }])
-      )
-    case TreeUiActionTypes.COLLAPSE_ALL:
-      return Object.fromEntries(
-        Object.keys(state).map(key => [key, { expanded: false }])
-      )
-    case TreeUiActionTypes.INIT_STATE:
-      return action.state
-    default:
-      return state
-  }
-}
 
 
 function App() {
@@ -51,11 +27,15 @@ function App() {
   const [uiState, dispatch] = useReducer(treeUiStateReducer, {})
   const [dialog, setDialog] = useState<DialogState>(null)
 
+  // general function to set excel data, used because of dialog confirmations
+  const generateTableFromExcelData = (jsonData: string[][]) => {
+    const treeData =  parseExcelFile(jsonData);
+    setTreeData(treeData);
+  }
   // whenever treeData changes, update uiState
   useEffect(() => {
     dispatch({ type: TreeUiActionTypes.INIT_STATE, state: mapTreeToUiState(treeData) })
   }, [treeData]);
-  
 
   const showErrorDialog = (message: string) => {
     setDialog({
@@ -76,12 +56,6 @@ function App() {
       }
     })
   }
-
-  const generateTableFromExcelData = (jsonData: string[][]) => {
-    const treeData =  parseExcelFile(jsonData);
-    setTreeData(treeData);
-  }
-
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
