@@ -29,7 +29,7 @@ export default function TreeTable({ data }: {data: TableRow[]}) {
           >
             {`${t.table.collapseAll}`}
         </button>
-        
+        <div className="spacer"></div>
         <button 
           className="global-toggle-button"
           onClick={changeSticky}

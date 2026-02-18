@@ -233,6 +233,10 @@
   gap: 1rem;
 }
 
+.table-controls .spacer {
+	flex: 1;
+}
+
 .global-toggle-button {
   background-color: #667eea;
   color: white;
