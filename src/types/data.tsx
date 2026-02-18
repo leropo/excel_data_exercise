@@ -21,3 +21,5 @@ export type TableRow = {
   data: CsvRow;
   children: Array<TableRow>
 };
+
+export type TreeUiState = Record<string, { expanded: boolean }>;

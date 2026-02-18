@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import * as XLSX from 'xlsx'
 
 import TreeTable from './components/TreeTable'
@@ -6,6 +6,7 @@ import FileUpload from './components/FileUpload'
 import { LanguageSwitcher } from './components/LanguageSwitcher'
 import { parseExcelFile, validateExcelFile } from './helpers/parseUtils'
 import { generateErrorListing, generateHeaderDifferences } from './helpers/jsxUtils'
+import { mapTreeToUiState } from './helpers/mappers'
 import { ERROR_TYPE_WRONG_HEADER, ERROR_TYPE_WRONG_OUTLINE, XLSX_EXTENSION, XLS_EXTENSION } from './helpers/constants'
 import './styles/App.css'
 import { TableRow } from "./types/data";
@@ -21,6 +22,12 @@ function App() {
   const [treeData, setTreeData] = useState<TableRow[]>([])
   const [uiState, setUiState] = useState({})
   const [dialog, setDialog] = useState<DialogState>(null)
+
+  // whenever treeData changes, update uiState
+  useEffect(() => {
+    setUiState(mapTreeToUiState(treeData))
+  }, [treeData]);
+  
 
   const showErrorDialog = (message: string) => {
     setDialog({
