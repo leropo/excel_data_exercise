@@ -3,6 +3,7 @@ import { Row } from "./Row";
 import { TableRow } from "../types/data";
 import { useTranslation } from "../i18n/TranslationContext";
 import { useTreeUiState } from "../contexts/TreeUiStateContext";
+import { TreeUiActionTypes } from '../constants/uistate'
 
 export default function TreeTable({ data }: {data: TableRow[]}) {
     const { t } = useTranslation();
@@ -14,11 +15,11 @@ export default function TreeTable({ data }: {data: TableRow[]}) {
     };
 
     const toggleExpandAll = () => {
-      dispatch({ type: 'EXPAND_ALL' });
+      dispatch({ type: TreeUiActionTypes.EXPAND_ALL });
     };
 
     const toggleCollapseAll = () => {
-      dispatch({ type: 'COLLAPSE_ALL' });
+      dispatch({ type: TreeUiActionTypes.COLLAPSE_ALL });
     };
     return (
     <div>

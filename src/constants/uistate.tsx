@@ -1,0 +1,7 @@
+export const TreeUiActionTypes = {
+    TOGGLE_EXPAND: 'TOGGLE_EXPAND',
+    EXPAND_ALL: 'EXPAND_ALL',
+    COLLAPSE_ALL: 'COLLAPSE_ALL',
+    INIT_STATE: 'INIT_STATE'
+  } as const
+  

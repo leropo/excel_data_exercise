@@ -1,11 +1,11 @@
-import { CVS_COLUMNS, LEAF_NODE_ENDING, OUTLINE_LEVEL_INDEX, ERROR_TYPE_WRONG_HEADER, ERROR_TYPE_WRONG_OUTLINE } from './constants'
+import { XLSX_COLUMNS, LEAF_NODE_ENDING, OUTLINE_LEVEL_INDEX, ERROR_TYPE_WRONG_HEADER, ERROR_TYPE_WRONG_OUTLINE } from '../constants/xlsx'
 import { CsvRow, TableRow, UnkeyedRow } from "../types/data";
 import { validateOutlineLevels } from './validators'
 
 function parseValues(row: string[]): CsvRow {
   const obj = {} as CsvRow;
   row.forEach((field, index) => {
-    const key = CVS_COLUMNS[index].field as keyof CsvRow;
+    const key = XLSX_COLUMNS[index].field as keyof CsvRow;
     obj[key] = field;
   });
    
@@ -35,7 +35,7 @@ function assignAutoKeys(
 
 export function validateExcelFile(data: string[][]): Record<string, any> {
   const header = data[0];
-  const expectedHeaders = CVS_COLUMNS.map(c => c.header);
+  const expectedHeaders = XLSX_COLUMNS.map(c => c.header);
   const headerMatch = header.length === expectedHeaders.length &&
     header.every((value, index) => value === expectedHeaders[index]);
 

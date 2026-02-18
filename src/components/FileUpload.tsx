@@ -1,4 +1,4 @@
-import { XLSX_EXTENSION, XLS_EXTENSION } from '../helpers/constants'
+import { XLSX_EXTENSION, XLS_EXTENSION } from '../constants/xlsx'
 import { useTranslation } from '../i18n/TranslationContext'
 import { forwardRef } from "react";
 import { FileUploadProps } from "../types/elements";

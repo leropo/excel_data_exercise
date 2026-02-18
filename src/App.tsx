@@ -1,38 +1,41 @@
 import React, { useState, useRef, useEffect, useReducer } from 'react'
 import * as XLSX from 'xlsx'
+import './styles/App.css'
 
+import Dialog from './components/Dialog'
 import TreeTable from './components/TreeTable'
 import FileUpload from './components/FileUpload'
 import { LanguageSwitcher } from './components/LanguageSwitcher'
+import { TreeUiStateContext, TreeUiStateAction } from './contexts/TreeUiStateContext'
+import { useTranslation } from './i18n/TranslationContext'
+
 import { parseExcelFile, validateExcelFile } from './helpers/parseUtils'
 import { generateErrorListing, generateHeaderDifferences } from './helpers/jsxUtils'
 import { mapTreeToUiState } from './helpers/mappers'
-import { ERROR_TYPE_WRONG_HEADER, ERROR_TYPE_WRONG_OUTLINE, XLSX_EXTENSION, XLS_EXTENSION } from './helpers/constants'
-import './styles/App.css'
+
+import { ERROR_TYPE_WRONG_HEADER, ERROR_TYPE_WRONG_OUTLINE, XLSX_EXTENSION, XLS_EXTENSION } from './constants/xlsx'
+import { TreeUiActionTypes } from './constants/uistate'
 import { TableRow, TreeUiState } from "./types/data";
 import { DialogState } from './types/elements'
-import { useTranslation } from './i18n/TranslationContext'
-import Dialog from './components/Dialog'
-import { TreeUiStateContext, TreeUiStateAction } from './contexts/TreeUiStateContext'
 
 function treeUiStateReducer(state: TreeUiState, action: TreeUiStateAction): TreeUiState {
   switch (action.type) {
-    case 'TOGGLE_EXPAND':
+    case TreeUiActionTypes.TOGGLE_EXPAND:
       return {
         ...state,
         [action.key]: {
           expanded: !state[action.key]?.expanded
         }
       }
-    case 'EXPAND_ALL':
+    case TreeUiActionTypes.EXPAND_ALL:
       return Object.fromEntries(
         Object.keys(state).map(key => [key, { expanded: true }])
       )
-    case 'COLLAPSE_ALL':
+    case TreeUiActionTypes.COLLAPSE_ALL:
       return Object.fromEntries(
         Object.keys(state).map(key => [key, { expanded: false }])
       )
-    case 'INIT_STATE':
+    case TreeUiActionTypes.INIT_STATE:
       return action.state
     default:
       return state
@@ -50,7 +53,7 @@ function App() {
 
   // whenever treeData changes, update uiState
   useEffect(() => {
-    dispatch({ type: 'INIT_STATE', state: mapTreeToUiState(treeData) })
+    dispatch({ type: TreeUiActionTypes.INIT_STATE, state: mapTreeToUiState(treeData) })
   }, [treeData]);
   
 

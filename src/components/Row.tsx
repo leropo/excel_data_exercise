@@ -2,6 +2,7 @@ import { DetailedInfo } from "./DetailedInfo";
 import { TableRow } from "../types/data";
 import { useTranslation } from "../i18n/TranslationContext";
 import { useTreeUiState } from "../contexts/TreeUiStateContext";
+import { TreeUiActionTypes } from '../constants/uistate'
 
 export function Row({ 
   node, 
@@ -17,7 +18,7 @@ export function Row({
   const isExpanded = uiState[node.key]?.expanded ?? false;
 
   const handleToggleExpand = () => {
-    dispatch({ type: 'TOGGLE_EXPAND', key: node.key });
+    dispatch({ type: TreeUiActionTypes.TOGGLE_EXPAND, key: node.key });
   };
 
   return (

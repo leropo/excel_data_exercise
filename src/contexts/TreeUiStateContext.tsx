@@ -1,11 +1,13 @@
 import React, { createContext, useContext, Dispatch } from 'react';
 import { TreeUiState } from '../types/data';
+import { TreeUiActionTypes } from '../constants/uistate'
+
 
 export type TreeUiStateAction =
-  | { type: 'TOGGLE_EXPAND'; key: string }
-  | { type: 'EXPAND_ALL' }
-  | { type: 'COLLAPSE_ALL' }
-  | { type: 'INIT_STATE'; state: TreeUiState }
+  | { type: typeof TreeUiActionTypes.TOGGLE_EXPAND; key: string }
+  | { type: typeof TreeUiActionTypes.EXPAND_ALL }
+  | { type: typeof TreeUiActionTypes.COLLAPSE_ALL }
+  | { type: typeof TreeUiActionTypes.INIT_STATE; state: TreeUiState }
 
 interface TreeUiStateContextType {
   uiState: TreeUiState;
