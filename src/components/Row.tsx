@@ -11,13 +11,13 @@ export function Row({
   depth?: number;
 }) {
   const { t } = useTranslation();
-  const { uiState, toggleExpand } = useTreeUiState();
+  const { uiState, dispatch } = useTreeUiState();
   const hasChildren = node.children && node.children.length > 0;
   const isLeaf = node.isLeaf;
   const isExpanded = uiState[node.key]?.expanded ?? false;
 
   const handleToggleExpand = () => {
-    toggleExpand(node.key);
+    dispatch({ type: 'TOGGLE_EXPAND', key: node.key });
   };
 
   return (

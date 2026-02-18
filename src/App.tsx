@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect, useReducer } from 'react'
 import * as XLSX from 'xlsx'
 
 import TreeTable from './components/TreeTable'
@@ -13,7 +13,31 @@ import { TableRow, TreeUiState } from "./types/data";
 import { DialogState } from './types/elements'
 import { useTranslation } from './i18n/TranslationContext'
 import Dialog from './components/Dialog'
-import { TreeUiStateContext } from './contexts/TreeUiStateContext'
+import { TreeUiStateContext, TreeUiStateAction } from './contexts/TreeUiStateContext'
+
+function treeUiStateReducer(state: TreeUiState, action: TreeUiStateAction): TreeUiState {
+  switch (action.type) {
+    case 'TOGGLE_EXPAND':
+      return {
+        ...state,
+        [action.key]: {
+          expanded: !state[action.key]?.expanded
+        }
+      }
+    case 'EXPAND_ALL':
+      return Object.fromEntries(
+        Object.keys(state).map(key => [key, { expanded: true }])
+      )
+    case 'COLLAPSE_ALL':
+      return Object.fromEntries(
+        Object.keys(state).map(key => [key, { expanded: false }])
+      )
+    case 'INIT_STATE':
+      return action.state
+    default:
+      return state
+  }
+}
 
 
 function App() {
@@ -21,22 +45,13 @@ function App() {
   const fileInputRef = useRef(null);
 
   const [treeData, setTreeData] = useState<TableRow[]>([])
-  const [uiState, setUiState] = useState<TreeUiState>({})
+  const [uiState, dispatch] = useReducer(treeUiStateReducer, {})
   const [dialog, setDialog] = useState<DialogState>(null)
 
   // whenever treeData changes, update uiState
   useEffect(() => {
-    setUiState(mapTreeToUiState(treeData))
+    dispatch({ type: 'INIT_STATE', state: mapTreeToUiState(treeData) })
   }, [treeData]);
-
-  const toggleExpand = (key: string) => {
-    setUiState(prev => ({
-      ...prev,
-      [key]: {
-        expanded: !prev[key]?.expanded
-      }
-    }))
-  }
   
 
   const showErrorDialog = (message: string) => {
@@ -186,7 +201,7 @@ function App() {
           {treeData.length > 0 && (
             <div className="content-display">
               <div className="table-wrapper">
-                  <TreeUiStateContext.Provider value={{ uiState, toggleExpand }}>
+                  <TreeUiStateContext.Provider value={{ uiState, dispatch }}>
                     	<TreeTable data={treeData} />
                   </TreeUiStateContext.Provider>
               </div>

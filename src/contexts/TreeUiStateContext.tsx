@@ -1,9 +1,15 @@
-import React, { createContext, useContext } from 'react';
+import React, { createContext, useContext, Dispatch } from 'react';
 import { TreeUiState } from '../types/data';
+
+export type TreeUiStateAction =
+  | { type: 'TOGGLE_EXPAND'; key: string }
+  | { type: 'EXPAND_ALL' }
+  | { type: 'COLLAPSE_ALL' }
+  | { type: 'INIT_STATE'; state: TreeUiState }
 
 interface TreeUiStateContextType {
   uiState: TreeUiState;
-  toggleExpand: (key: string) => void;
+  dispatch: Dispatch<TreeUiStateAction>;
 }
 
 export const TreeUiStateContext = createContext<TreeUiStateContextType | undefined>(undefined);
