@@ -1,4 +1,4 @@
-export function flattenField<T, K extends keyof T>(
+export function flattenField<T extends { children: T[] }, K extends keyof T>(
     nodes: T[],
     field: K
   ): T[K][] {
@@ -11,9 +11,8 @@ export function flattenField<T, K extends keyof T>(
           walk(node.children as T[]);
         }
       }
-    }
-  
+    }  
     walk(nodes);
     return result;
-  }
+}
   
