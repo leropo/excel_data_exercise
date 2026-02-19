@@ -3,9 +3,10 @@ import { Row } from "./Row";
 import { TableRow } from "../types/data";
 import { useTranslation } from "../i18n/TranslationContext";
 import { useTreeUiState } from "../contexts/TreeUiStateContext";
+import { TreeDataContext } from "../contexts/TreeDataContext";
 import { TreeUiActionTypes } from '../constants/uistate'
 
-export default function TreeTable({ data }: {data: TableRow[]}) {
+export default function TreeTable({ treeData }: {treeData: TableRow[]}) {
     const { t } = useTranslation();
     const { dispatch } = useTreeUiState();
     const [stickyHeader, setStrickyHeader] = useState<boolean>(false);
@@ -72,9 +73,11 @@ export default function TreeTable({ data }: {data: TableRow[]}) {
                 </tr>
             </thead>
             <tbody>
-              {data.map(node => (
-                <Row key={`data_row_${node.key}`} node={node} />
-              ))}
+              <TreeDataContext.Provider value={{ treeData: treeData }}>
+                {treeData.map(node => (
+                  <Row key={`data_row_${node.key}`} node={node} />
+                ))}
+              </TreeDataContext.Provider>
             </tbody>
           </table>
         </div>

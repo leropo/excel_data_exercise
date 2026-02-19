@@ -170,7 +170,6 @@ function App() {
         <header className="app-header">
           <div className="header-content ">
             <FileUpload ref={fileInputRef}  handleFileUpload={handleFileUpload} checkExistingData={checkExistingData} />
-
             <LanguageSwitcher />
           </div>
         </header>
@@ -180,7 +179,7 @@ function App() {
             <div className="content-display">
               <div className="table-wrapper">
                   <TreeUiStateContext.Provider value={{ uiState, dispatch }}>
-                    	<TreeTable data={treeData} />
+                    	<TreeTable treeData={treeData} />
                   </TreeUiStateContext.Provider>
               </div>
             </div>
