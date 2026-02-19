@@ -63,6 +63,9 @@ export const sl: TranslationKeys = {
   details: {
     description: "Opis",
     quantity: "Količina",
+    quantity_type: "Količina Tip",
+    quantity_unit: "Količina Enota",
     elementQuery: "Koda Element Query",
+    quantityFormula: "Količina Formula"
   },
 };

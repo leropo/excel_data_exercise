@@ -61,7 +61,10 @@ export const en = {
   details: {
     description: "Description",
     quantity: "Quantity",
+    quantity_type: "Quantity Type",
+    quantity_unit: "Quantity Unit",
     elementQuery: "Element Query",
+    quantityFormula: "Quantity Formula"
   },
 };
 
