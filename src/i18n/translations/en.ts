@@ -35,6 +35,7 @@ export const en = {
   // TreeTable.tsx
   table: {
     expandAll: "Expand All",
+    expandParents: "Expand Parents",
     collapseAll: "Collapse All",
     pinHeader : "Pin Header",
     unpinHeader : "Unpin Header",

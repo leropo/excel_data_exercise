@@ -37,6 +37,7 @@ export const sl: TranslationKeys = {
   // TreeTable.tsx
   table: {
     expandAll: "Razširi vse",
+    expandParents: "Razširi poglavja",
     collapseAll: "Združi vse",
     pinHeader: "Fiksiraj Glavo",
     unpinHeader: "Odpni Glavo",

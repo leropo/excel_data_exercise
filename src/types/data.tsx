@@ -22,4 +22,9 @@ export type TableRow = {
   children: Array<TableRow>
 };
 
+export type HiearchyKeys = {
+  upper: string[];
+  lower: string[];
+}
+
 export type TreeUiState = Record<string, { expanded: boolean }>;
