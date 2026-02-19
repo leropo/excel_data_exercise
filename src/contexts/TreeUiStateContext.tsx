@@ -6,6 +6,7 @@ export type TreeUiStateAction =
   | { type: typeof TreeUiActionTypes.TOGGLE_EXPAND; key: string }
   | { type: typeof TreeUiActionTypes.EXPAND_ALL }
   | { type: typeof TreeUiActionTypes.COLLAPSE_ALL }
+  | { type: typeof TreeUiActionTypes.EXPAND_AND_COLLAPSE; expandKeys: string[]; collapseKeys: string[]}
   | { type: typeof TreeUiActionTypes.INIT_STATE; state: TreeUiState }
 
 interface TreeUiStateContextType {
@@ -34,6 +35,7 @@ export function treeUiStateReducer(state: TreeUiState, action: TreeUiStateAction
           expanded: !state[action.key]?.expanded
         }
       }
+    // no longer used since low level children will be closed at start, but will show majority of information
     case TreeUiActionTypes.EXPAND_ALL:
       return Object.fromEntries(
         Object.keys(state).map(key => [key, { expanded: true }])
@@ -42,6 +44,23 @@ export function treeUiStateReducer(state: TreeUiState, action: TreeUiStateAction
       return Object.fromEntries(
         Object.keys(state).map(key => [key, { expanded: false }])
       )
+    case TreeUiActionTypes.EXPAND_AND_COLLAPSE:
+      return {
+        ...state,
+        // update the opened node to expanded
+        ...Object.fromEntries(
+          action.expandKeys.map(key => [
+            key,
+            { expanded: true }
+        ])), 
+        // update all children keys to closed, in case they were opened before
+        ...Object.fromEntries(
+          action.collapseKeys.map(key => [
+            key,
+            { expanded: false }
+        ])), 
+      }
+
     case TreeUiActionTypes.INIT_STATE:
       return action.state
     default:

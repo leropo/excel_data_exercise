@@ -2,7 +2,9 @@ import { DetailedInfo } from "./DetailedInfo";
 import { TableRow } from "../types/data";
 import { useTranslation } from "../i18n/TranslationContext";
 import { useTreeUiState } from "../contexts/TreeUiStateContext";
+import { useTreeDataState } from "../contexts/TreeDataContext";
 import { TreeUiActionTypes } from '../constants/uistate'
+import { findNodeByKeyPath } from '../helpers/tree'
 
 export function Row({ 
   node, 
@@ -13,12 +15,23 @@ export function Row({
 }) {
   const { t } = useTranslation();
   const { uiState, dispatch } = useTreeUiState();
+  const { treeData } = useTreeDataState();
+
   const hasChildren = node.children && node.children.length > 0;
   const isLeaf = node.isLeaf;
   const isExpanded = uiState[node.key]?.expanded ?? false;
 
   const handleToggleExpand = () => {
-    dispatch({ type: TreeUiActionTypes.TOGGLE_EXPAND, key: node.key });
+    // if node is not leaf node and is now opened, set childs to closed,
+    // in case they were opened before
+    if (!isLeaf && !isExpanded) {
+        const res = findNodeByKeyPath(treeData, node.key);
+        const childKeys = res?.children?.map(c => c.key) ?? [];
+        dispatch({ type: TreeUiActionTypes.EXPAND_AND_COLLAPSE, expandKeys: [node.key], collapseKeys:childKeys});
+    }
+    else {
+      dispatch({ type: TreeUiActionTypes.TOGGLE_EXPAND, key: node.key });
+    }
   };
 
   return (
@@ -54,8 +67,8 @@ export function Row({
           <Row key={`data_row_${child.key}`} node={child} depth={depth + 1} />
         ))}
 
-      {isExpanded && isLeaf &&
-          <DetailedInfo key={`detailed_info_${node.key}`} node={node} />
+      {isLeaf &&
+          <DetailedInfo key={`detailed_info_${node.key}`} node={node} isExpanded={isExpanded} />
       }
 
     </>

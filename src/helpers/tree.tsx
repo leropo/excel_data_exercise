@@ -40,7 +40,7 @@ export function findNodeByKeyPath(
   return currentNode ?? null;
 }
 
-export function groupParentAndLeaf(root: TableRow): HiearchyKeys {
+export function groupParentAndLeaf(root: TableRow[]): HiearchyKeys {
   const leafKeys: string[] = [];
   const parentKeys: string[] = [];
 
@@ -52,12 +52,11 @@ export function groupParentAndLeaf(root: TableRow): HiearchyKeys {
       node.children.forEach(traverse);
     }
   }
-  traverse(root);
+  root.forEach(traverse);
   return {upper: parentKeys, lower: leafKeys}; 
 }
 
-
-export function groupLevelAboveLeaf(root: TableRow): HiearchyKeys {
+export function groupLevelAboveLeaf(root: TableRow[]): HiearchyKeys {
   const onlyNonLeafChildrenKeys: string[] = [];
   const leafOrHasLeafChildrenKeys: string[] = [];
 
@@ -81,7 +80,7 @@ export function groupLevelAboveLeaf(root: TableRow): HiearchyKeys {
     node.children.forEach(traverse);
   }
 
-  traverse(root);
+  root.forEach(traverse);
   return {upper: onlyNonLeafChildrenKeys, lower: leafOrHasLeafChildrenKeys}; 
 }
 

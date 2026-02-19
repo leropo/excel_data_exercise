@@ -5,6 +5,7 @@ import { useTranslation } from "../i18n/TranslationContext";
 import { useTreeUiState } from "../contexts/TreeUiStateContext";
 import { TreeDataContext } from "../contexts/TreeDataContext";
 import { TreeUiActionTypes } from '../constants/uistate'
+import { groupParentAndLeaf, groupLevelAboveLeaf } from '../helpers/tree'
 
 export default function TreeTable({ treeData }: {treeData: TableRow[]}) {
     const { t } = useTranslation();
@@ -15,9 +16,16 @@ export default function TreeTable({ treeData }: {treeData: TableRow[]}) {
       setStrickyHeader(!stickyHeader)
     };
 
-    const toggleExpandAll = () => {
-      dispatch({ type: TreeUiActionTypes.EXPAND_ALL });
+    const toggleExpandParents = () => { 
+      const {upper, lower} = groupParentAndLeaf(treeData);
+      dispatch({ type: TreeUiActionTypes.EXPAND_AND_COLLAPSE, expandKeys: upper, collapseKeys:lower});
     };
+
+    const toggleExpandAboveLeafs = () => { 
+      const {upper, lower} = groupLevelAboveLeaf(treeData);
+      dispatch({ type: TreeUiActionTypes.EXPAND_AND_COLLAPSE, expandKeys: upper, collapseKeys:lower});
+    };
+
 
     const toggleCollapseAll = () => {
       dispatch({ type: TreeUiActionTypes.COLLAPSE_ALL });
@@ -25,13 +33,20 @@ export default function TreeTable({ treeData }: {treeData: TableRow[]}) {
     return (
     <div>
       <div className="table-controls">
-
+      
         <button 
             className="global-toggle-button"
-            onClick={toggleExpandAll}
+            onClick={toggleExpandParents}
             aria-label={t.table.expandAll}
           >
             {`${t.table.expandAll}`}
+        </button>
+        <button 
+            className="global-toggle-button"
+            onClick={toggleExpandAboveLeafs}
+            aria-label={t.table.expandParents}
+          >
+            {`${t.table.expandParents}`}
         </button>
         <button 
             className="global-toggle-button"
