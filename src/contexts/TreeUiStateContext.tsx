@@ -2,7 +2,6 @@ import { createContext, useContext, Dispatch } from 'react';
 import { TreeUiState } from '../types/data';
 import { TreeUiActionTypes } from '../constants/uistate'
 
-
 export type TreeUiStateAction =
   | { type: typeof TreeUiActionTypes.TOGGLE_EXPAND; key: string }
   | { type: typeof TreeUiActionTypes.EXPAND_ALL }

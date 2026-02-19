@@ -12,6 +12,7 @@ import { useTranslation } from './i18n/TranslationContext'
 import { parseExcelFile, validateExcelFile } from './helpers/parseUtils'
 import { generateErrorListing, generateHeaderDifferences } from './helpers/jsxUtils'
 import { mapTreeToUiState } from './helpers/mappers'
+import { findNodeByKeyPath } from './helpers/tree'
 
 import { ERROR_TYPE_WRONG_HEADER, ERROR_TYPE_WRONG_OUTLINE, XLSX_EXTENSION, XLS_EXTENSION } from './constants/xlsx'
 import { TreeUiActionTypes } from './constants/uistate'

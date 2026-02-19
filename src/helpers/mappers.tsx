@@ -1,4 +1,4 @@
-import {flattenField} from './general'
+import {flattenField} from './tree'
 import {TableRow, TreeUiState} from '../types/data'
 
 export function mapTreeToUiState (treeData: TableRow[]): TreeUiState {
