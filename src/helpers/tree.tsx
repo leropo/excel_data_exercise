@@ -1,4 +1,4 @@
-import {TableRow} from '../types/data'
+import {TableRow, HiearchyKeys} from '../types/data'
 
 export function flattenField<T extends { children: T[] }, K extends keyof T>(
     nodes: T[],
@@ -39,6 +39,52 @@ export function findNodeByKeyPath(
 
   return currentNode ?? null;
 }
+
+export function groupParentAndLeaf(root: TableRow): HiearchyKeys {
+  const leafKeys: string[] = [];
+  const parentKeys: string[] = [];
+
+  function traverse(node: TableRow) {
+    if (node.isLeaf) {
+      leafKeys.push(node.key);
+    } else {
+      parentKeys.push(node.key);
+      node.children.forEach(traverse);
+    }
+  }
+  traverse(root);
+  return {upper: parentKeys, lower: leafKeys}; 
+}
+
+
+export function groupLevelAboveLeaf(root: TableRow): HiearchyKeys {
+  const onlyNonLeafChildrenKeys: string[] = [];
+  const leafOrHasLeafChildrenKeys: string[] = [];
+
+  function traverse(node: TableRow) {
+    if (node.isLeaf) {
+      // Leaf nodes go directly into group B
+      leafOrHasLeafChildrenKeys.push(node.key);
+      return;
+    }
+
+    // Node is not a leaf → inspect children
+    const hasLeafChild = node.children.some(child => child.isLeaf);
+
+    if (hasLeafChild) {
+      leafOrHasLeafChildrenKeys.push(node.key);
+    } else {
+      onlyNonLeafChildrenKeys.push(node.key);
+    }
+
+    // Continue traversal
+    node.children.forEach(traverse);
+  }
+
+  traverse(root);
+  return {upper: onlyNonLeafChildrenKeys, lower: leafOrHasLeafChildrenKeys}; 
+}
+
 
 function lastSegment(key: string): string {
   const parts = key.split("/");
