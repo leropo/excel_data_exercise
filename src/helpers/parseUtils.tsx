@@ -1,6 +1,7 @@
 import { XLSX_COLUMNS, LEAF_NODE_ENDING, OUTLINE_LEVEL_INDEX, ERROR_TYPE_WRONG_HEADER, ERROR_TYPE_WRONG_OUTLINE } from '../constants/xlsx'
 import { CsvRow, TableRow, UnkeyedRow } from "../types/data";
 import { validateOutlineLevels } from './validators'
+import type { TranslationKeys } from '../i18n/translations/en';
 
 function parseValues(row: string[]): CsvRow {
   const obj = {} as CsvRow;
@@ -33,7 +34,7 @@ function assignAutoKeys(
 }
 
 
-export function validateExcelFile(data: string[][]): Record<string, any> {
+export function validateExcelFile(data: string[][], t: TranslationKeys): Record<string, any> {
   const header = data[0];
   const expectedHeaders = XLSX_COLUMNS.map(c => c.header);
   const headerMatch = header.length === expectedHeaders.length &&
@@ -48,7 +49,7 @@ export function validateExcelFile(data: string[][]): Record<string, any> {
   }
 
   const body = data.slice(1);
-  const errors = validateOutlineLevels(body, OUTLINE_LEVEL_INDEX)
+  const errors = validateOutlineLevels(body, OUTLINE_LEVEL_INDEX, t)
  
   if (errors.length > 0) {
      return {

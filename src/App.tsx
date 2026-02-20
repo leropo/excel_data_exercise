@@ -94,7 +94,7 @@ function App() {
           defval: '',
         })
 
-        const errorsData = validateExcelFile(excelData);
+        const errorsData = validateExcelFile(excelData, t);
         if (errorsData.error) {
           if (errorsData.error == ERROR_TYPE_WRONG_HEADER ) {
             confirmParsingBecauseOfErrors(t.app.errors.wrongHeader,

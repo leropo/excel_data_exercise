@@ -29,6 +29,16 @@ export const en = {
       errorIndex: "Index",
       errorValue: "Value",
     },
+    errorDescription: {
+      emptyString: "Format error: empty string",
+      hierarchyRepeated: "Brachning error, current is higher level, but starts the same as previous",
+      leafContinuation: "Hierarchy error: leaf is not continued correctly",
+      leafDescend: "Leaf error: cannot descend after a leaf node ending in .0",
+      levelContinuation: "Hierarchy error: next level is not continued correctly, it must start with previous one.",
+      nonDigitSegment: "Format error: non-digit segment",
+      notDigit: "Format error: must start with a digit",
+      sameLength: "Hierarchy error: same length, length must among levels, unless we are in leaf node",    
+    },
     continueWithErrors: "Some issues were found in your file. You can still continue, but please review the errors carefully.",
   },
 

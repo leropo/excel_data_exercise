@@ -31,6 +31,16 @@ export const sl: TranslationKeys = {
       errorIndex: "Zap. št.",
       errorValue: "Nivo Hiearhije",
     },
+    errorDescription: {
+      emptyString: "Napaka v podaktih: prazen niz",
+      hierarchyRepeated: "Napaka pri razvejanju, trenutna je višje ravni, vendar se začne enako kot prejšnja",
+      leafContinuation: "Napaka v hierarhiji: list se ne nadaljuje pravilno",
+      leafDescend: "Napaka v hierarhiji: ni mogoče spustiti nižje kot listno vozlišču, ki se konča z .0",
+      levelContinuation: "Napaka v hierarhiji: naslednja raven se ne nadaljuje pravilno, začeti se mora s prejšnjo.",
+      nonDigitSegment: "Napaka v podaktih: segment, ki ni številka",
+      notDigit: "Napaka v podaktih: mora se začeti s številko",
+      sameLength: "Napaka v hierarhiji: enaka dolžina, dolžina mora biti različna med sosednjimi zapisi, razen če smo v listnem vozlišču",
+    },
     continueWithErrors: "V vaši datoteki so bile najdene napake. Še vedno lahko nadaljujete, vendar vas prosimo, da natančno pregledate napake.",
   },
 

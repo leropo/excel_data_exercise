@@ -32,7 +32,9 @@ export function generateErrorListing(errorsData: string[],
                   <td colSpan={2}>
                     <ul>
                       {errors.map((err, i) => (
-                        <li key={i}>{err}</li>
+                        <li key={i}>
+                          {err}
+                        </li>
                       ))}
                     </ul>
                   </td>

@@ -1,4 +1,6 @@
-export function validateOutlineLevels(list: string[][], outlineLevelColumnIndex: number): any[] {
+import type { TranslationKeys } from '../i18n/translations/en';
+
+export function validateOutlineLevels(list: string[][], outlineLevelColumnIndex: number, t: TranslationKeys): any[] {
     const results = [];
 
     function parse(item: string) {
@@ -42,18 +44,18 @@ export function validateOutlineLevels(list: string[][], outlineLevelColumnIndex:
 
         if (parts.length === 0) {
             // problem is empty string
-            errors.push("Format error: empty string");
+            errors.push(t.dialog.errorDescription.emptyString);
         }
 
         if (!isDigits(parts[0])) {
             // problem it does not have digits
-            errors.push("Format error: must start with a digit");
+            errors.push(t.dialog.errorDescription.notDigit);
         }
 
         for (const p of parts) {
             // problem not a number
             if (!isDigits(p)) {
-                errors.push(`Format error: non-digit segment '${p}'`);
+                errors.push(`${t.dialog.errorDescription.notDigit} '${p}'`);
             }
         }
 
@@ -78,25 +80,25 @@ export function validateOutlineLevels(list: string[][], outlineLevelColumnIndex:
         // same length is only possible, if previous node is leaf 
         if (curr.length == prev.length) {
             if (!prevIsLeaf) {
-                errors.push("Hierarchy error: same length, length must among levels, unless we are in leaf node");
+                errors.push(t.dialog.errorDescription.sameLength);
             }
             else if (prevIsLeaf && !prefixMatches(curr, prev)) {
-                errors.push("Hierarchy error: leaf is not continued correctly");
+                errors.push(t.dialog.errorDescription.leafContinuation);
             }
         }
         // shorter length for current means we have gone up in hiearchy
         else if (curr.length < prev.length) {
             if (prefixMatches(curr.slice(0, prev.length), prev)) {
-                errors.push("Brachning error, current is higher level, but starts the same as previous");
+                errors.push(t.dialog.errorDescription.hierarchyRepeated)
             }
         }
         // current is longer curr.length > prev.length
         // you cannot continue if previous if leaf node
         else if (prevIsLeaf){
-            errors.push("Leaf error: cannot descend after a leaf node ending in .0");
+            errors.push(t.dialog.errorDescription.leafDescend);
         }
         else if (!prefixMatches(curr.slice(0, prev.length), prev)){
-            errors.push("Hierarchy error: next level is not continued correctly, it must start with previous one.");
+            errors.push(t.dialog.errorDescription.levelContinuation)
         }
 
 
