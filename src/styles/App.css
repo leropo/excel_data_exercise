@@ -1,7 +1,7 @@
 .app {
   width: 100%;
   min-height: 100vh;
-  background-color: #4472C4 ;
+  background-color: var(--theme-color);
   padding: 0.5rem;
 }
 
@@ -66,7 +66,7 @@
 }
 
 .language-select option {
-  background: #667eea;
+  background: var(--theme-color);
   color: var(--theme-text);
 }
 

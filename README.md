@@ -64,8 +64,8 @@ Once your data is parsed and the table is generated, you can use the following c
 | Control Location | Action | Description |
 | :--- | :--- | :--- |
 | **Left Side** | **Expand All** | Opens every node in the hierarchy. |
-| **Left Side** | **Expand to Parent** | Expands nodes up to the parent level. |
-| **Left Side** | **Collapse** | Minimizes all nodes to the root level. |
+| **Left Side** | **Expand only Parents** | Expands nodes up to the parent level. |
+| **Left Side** | **Collapse All** | Minimizes all nodes to the root level. |
 | **Right Side** | **Sticky Header** | Toggles a fixed header that remains visible while scrolling. |
 
 ---
